@@ -9,12 +9,29 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { execa } from 'execa';
 import degit from 'degit';
+import figlet from 'figlet'; // Add this import
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // GitHub repository for the template
 const DEFAULT_REPO = 'stevedylandev/bhvr'; // Replace with your actual repo
+
+// Function to display a fun banner
+function displayBanner() {
+  const text = figlet.textSync('bhvr', {
+    font: 'Big',
+    horizontalLayout: 'default',
+    verticalLayout: 'default',
+    width: 80,
+    whitespaceBreak: true
+  });
+
+  console.log('\n');
+  console.log(chalk.yellowBright(text));
+  console.log(`\n${chalk.cyan('🦫 Lets build 🦫')}\n`);
+  console.log(`${chalk.blue('https://github.com/stevedylandev/bhvr')}\n`);
+}
 
 // Set up the CLI program
 program
@@ -27,9 +44,11 @@ program
   .option('--branch <branch>', 'specify a branch to use from the repository', 'main')
   .action(async (projectDirectory, options) => {
     try {
+      displayBanner();
       const result = await createProject(projectDirectory, options);
       if (result) {
-        console.log(chalk.green.bold('\n🎉 Project created successfully!'));
+
+        console.log(chalk.green.bold('🎉 Project created successfully!'));
         console.log('\nNext steps:');
 
         if (!result.dependenciesInstalled) {
@@ -41,7 +60,8 @@ program
 
         console.log(chalk.cyan('  bun run dev:client   # Start the client'));
         console.log(chalk.cyan('  bun run dev:server   # Start the server in another terminal'));
-        return
+        console.log(chalk.cyan('  bun run dev          # Start all'));
+        process.exit(0);
       }
     } catch (err) {
       console.error(chalk.red('Error creating project:'), err);
@@ -50,7 +70,6 @@ program
   });
 
 program.parse();
-
 async function createProject(projectDirectory, options) {
   // If project directory not provided, prompt for it
   let projectName = projectDirectory;
@@ -127,7 +146,6 @@ async function createProject(projectDirectory, options) {
       const pkgJson = await fs.readJson(pkgJsonPath);
       pkgJson.name = projectName;
       await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
-      console.log(chalk.blue('Updated package.json with project name'));
     }
 
     // Remove the .git directory if it exists
