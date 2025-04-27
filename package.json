@@ -1,0 +1,40 @@
+{
+  "name": "create-bhvr",
+  "version": "0.0.5",
+  "description": "Create a new bhvr monorepo starter project",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "create-vrhb": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bun",
+    "vite",
+    "react",
+    "hono",
+    "monorepo",
+    "starter",
+    "template",
+    "create"
+  ],
+  "author": "Steve Simkins",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "prompts": "^2.4.2",
+    "degit": "^2.8.4",
+    "ora": "^6.3.1",
+    "execa": "^7.1.1"
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}
