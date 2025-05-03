@@ -9,13 +9,20 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { execa } from 'execa';
 import degit from 'degit';
-import figlet from 'figlet'; // Add this import
+import figlet from 'figlet';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // GitHub repository for the template
-const DEFAULT_REPO = 'stevedylandev/bhvr'; // Replace with your actual repo
+const DEFAULT_REPO = 'stevedylandev/bhvr';
+
+// Available templates
+const TEMPLATES = {
+  default: { branch: 'main', description: 'Basic setup with Bun, Hono, Vite and React' },
+  tailwind: { branch: 'tailwindcss', description: 'Basic setup + TailwindCSS' },
+  shadcn: { branch: 'shadcn-ui', description: 'Basic setup + TailwindCSS + shadcn/ui' }
+};
 
 // Function to display a fun banner
 function displayBanner() {
@@ -41,13 +48,13 @@ program
   .option('-y, --yes', 'skip confirmation prompts')
   .option('--ts, --typescript', 'use TypeScript (default)')
   .option('--repo <repo>', 'specify a custom GitHub repository as source', DEFAULT_REPO)
-  .option('--branch <branch>', 'specify a branch to use from the repository', 'main')
+  .option('--template <template>', 'specify a template (default, tailwind, shadcn)', 'default')
+  .option('--branch <branch>', 'specify a branch to use from the repository')
   .action(async (projectDirectory, options) => {
     try {
       displayBanner();
       const result = await createProject(projectDirectory, options);
       if (result) {
-
         console.log(chalk.green.bold('🎉 Project created successfully!'));
         console.log('\nNext steps:');
 
@@ -70,6 +77,7 @@ program
   });
 
 program.parse();
+
 async function createProject(projectDirectory, options) {
   // If project directory not provided, prompt for it
   let projectName = projectDirectory;
@@ -90,6 +98,31 @@ async function createProject(projectDirectory, options) {
     projectName = response.projectName;
   } else if (!projectName) {
     projectName = 'my-bhvr-app';
+  }
+
+  // Template selection
+  let templateChoice = options.template;
+
+  if (!options.yes && !options.branch) {
+    const templateChoices = Object.keys(TEMPLATES).map(key => ({
+      title: `${key} (${TEMPLATES[key].description})`,
+      value: key
+    }));
+
+    const templateResponse = await prompts({
+      type: 'select',
+      name: 'template',
+      message: 'Select a template:',
+      choices: templateChoices,
+      initial: 0
+    });
+
+    if (templateResponse.template === undefined) {
+      console.log(chalk.yellow('Project creation cancelled.'));
+      return null;
+    }
+
+    templateChoice = templateResponse.template;
   }
 
   // Create the project directory
@@ -122,11 +155,9 @@ async function createProject(projectDirectory, options) {
 
   // Clone template from GitHub
   const repoPath = options.repo || DEFAULT_REPO;
-  const branchSpecifier = options.branch ? `#${options.branch}` : '';
-  const repoUrl = `${repoPath}${branchSpecifier}`;
-
-  //console.log(chalk.blue(`\nCreating a new bhvr project in ${chalk.bold(projectPath)}`));
-  //console.log(chalk.blue(`Downloading template from ${chalk.bold(repoUrl)}...`));
+  // Use provided branch, template branch, or default
+  const branch = options.branch || (TEMPLATES[templateChoice] ? TEMPLATES[templateChoice].branch : 'main');
+  const repoUrl = `${repoPath}#${branch}`;
 
   const spinner = ora('Downloading template...').start();
 
@@ -138,7 +169,7 @@ async function createProject(projectDirectory, options) {
     });
 
     await emitter.clone(projectPath);
-    spinner.succeed('Template downloaded successfully');
+    spinner.succeed(`Template downloaded successfully (${templateChoice} template)`);
 
     // Update package.json with project name
     const pkgJsonPath = path.join(projectPath, 'package.json');
@@ -246,7 +277,8 @@ async function createProject(projectDirectory, options) {
     return {
       projectName,
       gitInitialized,
-      dependenciesInstalled
+      dependenciesInstalled,
+      template: templateChoice,
     };
   } catch (err) {
     spinner.fail('Failed to download template');
