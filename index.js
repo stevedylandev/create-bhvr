@@ -10,6 +10,7 @@ import ora from 'ora';
 import { execa } from 'execa';
 import degit from 'degit';
 import figlet from 'figlet';
+import { defaultTemplate, shadcnTemplate, tailwindTemplate } from './utils/templates.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -288,7 +289,7 @@ async function createProject(projectDirectory, options) {
       });
 
       if (useRpc) {
-        await patchFilesForRPC(projectPath);
+        await patchFilesForRPC(projectPath, templateChoice);
       }
     }
 
@@ -304,7 +305,7 @@ async function createProject(projectDirectory, options) {
   }
 }
 
-async function patchFilesForRPC(projectPath) {
+async function patchFilesForRPC(projectPath, templateChoice) {
   const spinner = ora('Setting up RPC client...').start();
 
   try {
@@ -312,20 +313,18 @@ async function patchFilesForRPC(projectPath) {
     const clientPkgPath = path.join(projectPath, 'client', 'package.json');
     const clientPkg = await fs.readJson(clientPkgPath);
 
-    // Make sure hono client is in dependencies
     if (!clientPkg.dependencies.hono) {
-      clientPkg.dependencies.hono = "^4.7.7";
+      await execa('bun', ['install','hono'], { cwd: projectPath });
     }
 
     await fs.writeJson(clientPkgPath, clientPkg, { spaces: 2 });
 
-    // 2. Server modification - targeted approach based on known structure
+    // 2. Server modification for RPC export type
     const serverIndexPath = path.join(projectPath, 'server', 'src', 'index.ts');
     let serverContent = await fs.readFile(serverIndexPath, 'utf8');
 
-    // If the server doesn't already have the RPC structure, update it
     if (!serverContent.includes('export type AppType')) {
-      // Create the target server content based on the template
+      // Update server content to export the type
       const updatedServerContent = `import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import type { ApiResponse } from 'shared/dist'
@@ -354,68 +353,27 @@ export default app`;
       await fs.writeFile(serverIndexPath, updatedServerContent, 'utf8');
     }
 
-    // 3. Update App.tsx with RPC implementation
+    // 3. Update App.tsx based on template selection using switch statement
     const appTsxPath = path.join(projectPath, 'client', 'src', 'App.tsx');
-    let appTsxContent = await fs.readFile(appTsxPath, 'utf8');
 
-    // Only make changes if RPC isn't already set up
-    if (!appTsxContent.includes('import { hc } from \'hono/client\'')) {
-      // Find the key parts of the file we need to preserve
-      const importReactMatch = appTsxContent.match(/import\s+{\s*useState\s*}.*?from\s+['"]react['"]/);
-      const importBeaverMatch = appTsxContent.match(/import\s+beaver\s+from\s+['"]\.\/assets\/beaver\.svg['"]/);
-      const importSharedMatch = appTsxContent.match(/import.*?from\s+['"]shared['"]/);
-      const importCssMatch = appTsxContent.match(/import\s+['"]\.\/App\.css['"]/);
+    // Determine template content based on the template type
+    let updatedAppContent;
 
-      // Make sure we found the required parts
-      if (importReactMatch && importBeaverMatch && importCssMatch) {
-        // Get the current return JSX part
-        const returnJsxMatch = appTsxContent.match(/return\s*\(\s*<>([\s\S]*?)<\/>/);
-
-        if (returnJsxMatch) {
-          // Create the updated App.tsx content
-          const updatedAppContent = `import { useState } from 'react'
-import beaver from './assets/beaver.svg'
-import type { AppType } from '../../server/src'
-import { hc } from 'hono/client'
-${importSharedMatch ? importSharedMatch[0] : 'import { ApiResponse } from \'shared\''}
-import './App.css'
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
-
-const client = hc<AppType>(SERVER_URL);
-
-type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
-
-function App() {
-  const [data, setData] = useState<Awaited<ReturnType<ResponseType["json"]>> | undefined>()
-
-  async function sendRequest() {
-    try {
-      const res = await client.hello.$get()
-
-      if(!res.ok){
-        console.log("Error fetching data")
-        return
-      }
-
-      const data = await res.json()
-      setData(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  ${returnJsxMatch[0]}
-
-  )
-}
-export default App`;
-
-          await fs.writeFile(appTsxPath, updatedAppContent, 'utf8');
-        }
-      }
+    // Select template based on choice
+    switch (templateChoice) {
+      case 'shadcn':
+        updatedAppContent = shadcnTemplate;
+        break;
+      case 'tailwind':
+        updatedAppContent = tailwindTemplate;
+        break;
+      case 'default':
+      default:
+        updatedAppContent = defaultTemplate;
+        break;
     }
 
+    await fs.writeFile(appTsxPath, updatedAppContent, 'utf8');
     spinner.succeed('RPC client setup completed');
     return true;
   } catch (err) {

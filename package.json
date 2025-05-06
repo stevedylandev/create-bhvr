@@ -1,14 +1,15 @@
 {
   "name": "create-bhvr",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Create a new bhvr project",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "create-vrhb": "index.js"
+    "create-bhvr": "index.js"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "utils"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
