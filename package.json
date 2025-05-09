@@ -1,42 +1,39 @@
 {
-  "name": "create-bhvr",
-  "version": "0.3.1",
-  "description": "Create a new bhvr project",
-  "main": "index.js",
-  "type": "module",
-  "bin": {
-    "create-bhvr": "index.js"
-  },
-  "files": [
-    "index.js",
-    "utils"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "bun",
-    "vite",
-    "react",
-    "hono",
-    "monorepo",
-    "starter",
-    "template",
-    "create"
-  ],
-  "author": "Steve Simkins",
-  "license": "MIT",
-  "dependencies": {
-    "chalk": "^5.3.0",
-    "commander": "^11.1.0",
-    "degit": "^2.8.4",
-    "execa": "^7.1.1",
-    "figlet": "^1.8.1",
-    "fs-extra": "^11.2.0",
-    "ora": "^6.3.1",
-    "prompts": "^2.4.2"
-  },
-  "engines": {
-    "node": ">=14.16"
-  }
+	"name": "create-bhvr",
+	"version": "0.3.2",
+	"description": "Create a new bhvr project",
+	"main": "index.js",
+	"type": "module",
+	"bin": {
+		"create-bhvr": "index.js"
+	},
+	"files": ["index.js", "utils"],
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"bun",
+		"vite",
+		"react",
+		"hono",
+		"monorepo",
+		"starter",
+		"template",
+		"create"
+	],
+	"author": "Steve Simkins",
+	"license": "MIT",
+	"dependencies": {
+		"chalk": "^5.3.0",
+		"commander": "^11.1.0",
+		"degit": "^2.8.4",
+		"execa": "^7.1.1",
+		"figlet": "^1.8.1",
+		"fs-extra": "^11.2.0",
+		"ora": "^6.3.1",
+		"prompts": "^2.4.2"
+	},
+	"engines": {
+		"node": ">=14.16"
+	}
 }
