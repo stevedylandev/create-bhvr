@@ -14,6 +14,7 @@ import {
 	defaultTemplate,
 	shadcnTemplate,
 	tailwindTemplate,
+	honoRpcTemplate,
 } from "./utils/templates.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -351,37 +352,7 @@ async function patchFilesForRPC(projectPath, templateChoice) {
 
 		// 2. Server modification for RPC export type
 		const serverIndexPath = path.join(projectPath, "server", "src", "index.ts");
-		let serverContent = await fs.readFile(serverIndexPath, "utf8");
-
-		if (!serverContent.includes("export type AppType")) {
-			// Update server content to export the type
-			const updatedServerContent = `import { Hono } from 'hono'
-import { cors } from 'hono/cors'
-import type { ApiResponse } from 'shared/dist'
-
-const app = new Hono()
-
-app.use(cors())
-
-const routes = app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-.get('/hello', async (c) => {
-
-  const data: ApiResponse = {
-    message: "Hello BHVR!",
-    success: true
-  }
-
-  return c.json(data, { status: 200 })
-})
-
-export type AppType = typeof routes
-export default app`;
-
-			await fs.writeFile(serverIndexPath, updatedServerContent, "utf8");
-		}
+		await fs.writeFile(serverIndexPath, honoRpcTemplate, "utf8");
 
 		// 3. Update App.tsx based on template selection using switch statement
 		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");

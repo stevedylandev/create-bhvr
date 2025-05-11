@@ -1,39 +1,42 @@
-export const honoRpcTemplate = `import { Hono } from 'hono'
-import { cors } from 'hono/cors'
-import type { ApiResponse } from 'shared/dist'
+export const honoRpcTemplate = `import { Hono } from "hono";
+import { cors } from "hono/cors";
+import type { ApiResponse } from "shared/dist";
+import { hc } from "hono/client";
 
-const app = new Hono()
+export const app = new Hono()
 
-app.use(cors())
+.use(cors())
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
+.get("/", (c) => {
+	return c.text("Hello Hono!");
 })
 
-app.get('/hello', async (c) => {
+.get("/hello", async (c) => {
+	const data: ApiResponse = {
+		message: "Hello BHVR!",
+		success: true,
+	};
 
-  const data: ApiResponse = {
-    message: "Hello BHVR!",
-    success: true
-  }
+	return c.json(data, { status: 200 });
+});
 
-  return c.json(data, { status: 200 })
-})
+const client = hc<typeof app>("");
+export type Client = typeof client;
 
-export type AppType = typeof app
-export default app`;
+export const hcWithType = (...args: Parameters<typeof hc>): Client =>
+hc<typeof app>(...args);
+
+export default app;`;
 
 export const tailwindTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
-import type { AppType } from 'server'
-import { hc } from 'hono/client'
+import { hcWithType } from 'server'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
-//@ts-ignore
-const client = hc<AppType>(SERVER_URL);
+const client = hcWithType(SERVER_URL);
 
 function App() {
   const [data, setData] = useState<Awaited<ReturnType<ResponseType["json"]>> | undefined>()
@@ -92,13 +95,11 @@ export default App`;
 export const shadcnTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
 import { Button } from './components/ui/button'
-import type { AppType } from 'server'
-import { hc } from 'hono/client'
+import { hcWithType } from 'server'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
-//@ts-ignore
-const client = hc<AppType>(SERVER_URL);
+const client = hcWithType(SERVER_URL);
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
@@ -162,14 +163,12 @@ export default App`;
 
 export const defaultTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
-import type { AppType } from 'server'
-import { hc } from 'hono/client'
+import { hcWithType } from 'server'
 import './App.css'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
-//@ts-ignore
-const client = hc<AppType>(SERVER_URL);
+const client = hcWithType(SERVER_URL);
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
