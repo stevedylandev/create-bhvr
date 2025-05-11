@@ -6,11 +6,11 @@ const app = new Hono()
 
 app.use(cors())
 
-const routes = app.get('/', (c) => {
+app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-.get('/hello', async (c) => {
+app.get('/hello', async (c) => {
 
   const data: ApiResponse = {
     message: "Hello BHVR!",
@@ -20,7 +20,7 @@ const routes = app.get('/', (c) => {
   return c.json(data, { status: 200 })
 })
 
-export type AppType = typeof routes
+export type AppType = typeof app
 export default app`;
 
 export const tailwindTemplate = `import { useState } from 'react'
@@ -32,6 +32,7 @@ const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
+//@ts-ignore
 const client = hc<AppType>(SERVER_URL);
 
 function App() {
@@ -86,7 +87,7 @@ function App() {
   )
 }
 
-export default App`
+export default App`;
 
 export const shadcnTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
@@ -96,6 +97,7 @@ import { hc } from 'hono/client'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
+//@ts-ignore
 const client = hc<AppType>(SERVER_URL);
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
@@ -166,6 +168,7 @@ import './App.css'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
+//@ts-ignore
 const client = hc<AppType>(SERVER_URL);
 
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
