@@ -1,6 +1,6 @@
 {
 	"name": "create-bhvr",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"description": "Create a new bhvr project",
 	"main": "index.js",
 	"type": "module",
