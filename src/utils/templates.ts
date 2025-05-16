@@ -1,3 +1,17 @@
+import type { TemplateInfo } from "../types";
+
+export const TEMPLATES: Record<string, TemplateInfo> = {
+	default: {
+		branch: "main",
+		description: "Basic setup with Bun, Hono, Vite and React",
+	},
+	tailwind: { branch: "tailwindcss", description: "Basic setup + TailwindCSS" },
+	shadcn: {
+		branch: "shadcn-ui",
+		description: "Basic setup + TailwindCSS + shadcn/ui",
+	},
+};
+
 export const honoRpcTemplate = `import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { ApiResponse } from "shared/dist";
