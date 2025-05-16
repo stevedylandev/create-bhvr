@@ -1,8 +1,6 @@
-#!/usr/bin/env node
-
 import fs from "fs-extra";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import prompts from "prompts";
 import { program } from "commander";
 import chalk from "chalk";
@@ -15,7 +13,7 @@ import {
 	shadcnTemplate,
 	tailwindTemplate,
 	honoRpcTemplate,
-} from "./utils/templates.js";
+} from "./utils/templates";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,8 +21,12 @@ const __dirname = path.dirname(__filename);
 // GitHub repository for the template
 const DEFAULT_REPO = "stevedylandev/bhvr";
 
-// Available templates
-const TEMPLATES = {
+interface TemplateInfo {
+	branch: string;
+	description: string;
+}
+
+const TEMPLATES: Record<string, TemplateInfo> = {
 	default: {
 		branch: "main",
 		description: "Basic setup with Bun, Hono, Vite and React",
@@ -36,7 +38,15 @@ const TEMPLATES = {
 	},
 };
 
-// Function to display a fun banner
+interface ProjectOptions {
+	yes?: boolean;
+	typescript?: boolean;
+	repo?: string;
+	template?: string;
+	branch?: string;
+	rpc?: boolean;
+}
+
 function displayBanner() {
 	const text = figlet.textSync("bhvr", {
 		font: "Big",
@@ -52,7 +62,6 @@ function displayBanner() {
 	console.log(`${chalk.blue("https://github.com/stevedylandev/bhvr")}\n`);
 }
 
-// Set up the CLI program
 program
 	.name("create-bhvr")
 	.description("Create a bhvr monorepo starter project")
@@ -103,8 +112,17 @@ program
 
 program.parse();
 
-async function createProject(projectDirectory, options) {
-	// If project directory not provided, prompt for it
+interface ProjectResult {
+	projectName: string;
+	gitInitialized: boolean;
+	dependenciesInstalled: boolean;
+	template: string;
+}
+
+async function createProject(
+	projectDirectory: string,
+	options: ProjectOptions,
+): Promise<ProjectResult | null> {
 	let projectName = projectDirectory;
 
 	if (!projectName && !options.yes) {
@@ -125,12 +143,11 @@ async function createProject(projectDirectory, options) {
 		projectName = "my-bhvr-app";
 	}
 
-	// Template selection
-	let templateChoice = options.template;
+	let templateChoice = options.template || "default";
 
 	if (!options.yes && !options.branch) {
 		const templateChoices = Object.keys(TEMPLATES).map((key) => ({
-			title: `${key} (${TEMPLATES[key].description})`,
+			title: `${key} (${TEMPLATES[key]?.description})`,
 			value: key,
 		}));
 
@@ -150,10 +167,8 @@ async function createProject(projectDirectory, options) {
 		templateChoice = templateResponse.template;
 	}
 
-	// Create the project directory
 	const projectPath = path.resolve(process.cwd(), projectName);
 
-	// Check if directory exists and is not empty
 	if (fs.existsSync(projectPath)) {
 		const files = fs.readdirSync(projectPath);
 
@@ -170,20 +185,16 @@ async function createProject(projectDirectory, options) {
 				return null;
 			}
 
-			// Clear directory if overwriting
 			await fs.emptyDir(projectPath);
 		}
 	}
 
-	// Create directory if it doesn't exist
 	fs.ensureDirSync(projectPath);
 
-	// Clone template from GitHub
 	const repoPath = options.repo || DEFAULT_REPO;
-	// Use provided branch, template branch, or default
-	const branch =
-		options.branch ||
-		(TEMPLATES[templateChoice] ? TEMPLATES[templateChoice].branch : "main");
+	const templateConfig =
+		TEMPLATES[templateChoice as keyof typeof TEMPLATES] || TEMPLATES.default;
+	const branch = options.branch || (templateConfig?.branch ?? "main");
 	const repoUrl = `${repoPath}#${branch}`;
 
 	const spinner = ora("Downloading template...").start();
@@ -200,7 +211,6 @@ async function createProject(projectDirectory, options) {
 			`Template downloaded successfully (${templateChoice} template)`,
 		);
 
-		// Update package.json with project name
 		const pkgJsonPath = path.join(projectPath, "package.json");
 		if (fs.existsSync(pkgJsonPath)) {
 			const pkgJson = await fs.readJson(pkgJsonPath);
@@ -208,18 +218,34 @@ async function createProject(projectDirectory, options) {
 			await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
 		}
 
-		// Remove the .git directory if it exists
 		const gitDir = path.join(projectPath, ".git");
 		if (fs.existsSync(gitDir)) {
 			await fs.remove(gitDir);
 			console.log(chalk.blue("Removed .git directory"));
 		}
 
-		if (options.rpc) {
-			await patchFilesForRPC(projectPath);
+		let useRpc = options.rpc;
+
+		if (!options.yes && !options.rpc) {
+			const rpcResponse = await prompts({
+				type: "confirm",
+				name: "useRpc",
+				message: "Use Hono RPC client for type-safe API communication?",
+				initial: false,
+			});
+
+			if (rpcResponse.useRpc === undefined) {
+				console.log(chalk.yellow("Project creation cancelled."));
+				return null;
+			}
+
+			useRpc = rpcResponse.useRpc;
 		}
 
-		// Initialize git repository?
+		if (useRpc) {
+			await patchFilesForRPC(projectPath, templateChoice);
+		}
+
 		let gitInitialized = false;
 
 		if (!options.yes) {
@@ -236,15 +262,18 @@ async function createProject(projectDirectory, options) {
 					await execa("git", ["init"], { cwd: projectPath });
 					spinner.succeed("Git repository initialized");
 					gitInitialized = true;
-				} catch (err) {
+				} catch (err: unknown) {
 					spinner.fail(
 						"Failed to initialize git repository. Is git installed?",
 					);
-					console.error(chalk.red("Git error:"), err.message);
+					if (err instanceof Error) {
+						console.error(chalk.red("Git error:"), err.message);
+					} else {
+						console.error(chalk.red("Git error: Unknown error"));
+					}
 				}
 			}
 		} else {
-			// If using --yes, automatically initialize git
 			try {
 				spinner.start("Initializing git repository...");
 				await execa("git", ["init"], { cwd: projectPath });
@@ -255,7 +284,6 @@ async function createProject(projectDirectory, options) {
 			}
 		}
 
-		// Install dependencies?
 		let dependenciesInstalled = false;
 
 		if (!options.yes) {
@@ -269,12 +297,10 @@ async function createProject(projectDirectory, options) {
 			if (depsResponse.installDeps) {
 				spinner.start("Installing dependencies...");
 				try {
-					// Try with bun first
 					await execa("bun", ["install"], { cwd: projectPath });
 					spinner.succeed("Dependencies installed with bun");
 					dependenciesInstalled = true;
 				} catch (bunErr) {
-					// If bun fails, try with npm
 					try {
 						spinner.text = "Installing dependencies with npm...";
 						await execa("npm", ["install"], { cwd: projectPath });
@@ -291,7 +317,6 @@ async function createProject(projectDirectory, options) {
 				}
 			}
 		} else {
-			// If using --yes, automatically install dependencies
 			spinner.start("Installing dependencies...");
 			try {
 				await execa("bun", ["install"], { cwd: projectPath });
@@ -311,19 +336,6 @@ async function createProject(projectDirectory, options) {
 			}
 		}
 
-		if (!options.yes && !options.rpc) {
-			const { useRpc } = await prompts({
-				type: "confirm",
-				name: "useRpc",
-				message: "Use Hono RPC client for type-safe API communication?",
-				initial: false,
-			});
-
-			if (useRpc) {
-				await patchFilesForRPC(projectPath, templateChoice);
-			}
-		}
-
 		return {
 			projectName,
 			gitInitialized,
@@ -336,7 +348,10 @@ async function createProject(projectDirectory, options) {
 	}
 }
 
-async function patchFilesForRPC(projectPath, templateChoice) {
+async function patchFilesForRPC(
+	projectPath: string,
+	templateChoice: string,
+): Promise<boolean> {
 	const spinner = ora("Setting up RPC client...").start();
 
 	try {
@@ -358,7 +373,7 @@ async function patchFilesForRPC(projectPath, templateChoice) {
 		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
 
 		// Determine template content based on the template type
-		let updatedAppContent;
+		let updatedAppContent: string;
 
 		// Select template based on choice
 		switch (templateChoice) {
@@ -368,7 +383,6 @@ async function patchFilesForRPC(projectPath, templateChoice) {
 			case "tailwind":
 				updatedAppContent = tailwindTemplate;
 				break;
-			case "default":
 			default:
 				updatedAppContent = defaultTemplate;
 				break;
@@ -377,9 +391,13 @@ async function patchFilesForRPC(projectPath, templateChoice) {
 		await fs.writeFile(appTsxPath, updatedAppContent, "utf8");
 		spinner.succeed("RPC client setup completed");
 		return true;
-	} catch (err) {
+	} catch (err: unknown) {
 		spinner.fail("Failed to set up RPC client");
-		console.error(chalk.red("Error:"), err.message);
+		if (err instanceof Error) {
+			console.error(chalk.red("Error:"), err.message);
+		} else {
+			console.error(chalk.red("Error: Unknown error"));
+		}
 		return false;
 	}
 }

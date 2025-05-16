@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node", // Add this for ESM support
+		"allowJs": true,
+		"composite": false,
+		"declaration": true,
+		"outDir": "./dist",
+		"noEmit": false,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "examples/**/*"]
+}
