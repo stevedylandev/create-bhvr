@@ -50,16 +50,24 @@ interface ProjectOptions {
 }
 
 function displayBanner() {
-	const text = figlet.textSync("bhvr", {
-		font: "Big",
-		horizontalLayout: "default",
-		verticalLayout: "default",
-		width: 80,
-		whitespaceBreak: true,
-	});
+	try {
+		const text = figlet.textSync("bhvr", {
+			font: "Standard", // Use the Standard font which is more commonly available
+			horizontalLayout: "default",
+			verticalLayout: "default",
+			width: 80,
+			whitespaceBreak: true,
+		});
 
-	console.log("\n");
-	console.log(chalk.yellowBright(text));
+		console.log("\n");
+		console.log(chalk.yellowBright(text));
+	} catch (error) {
+		// Fallback in case figlet fails for any reason
+		console.log("\n");
+		console.log(chalk.yellowBright("B H V R"));
+		console.log(chalk.yellow("=========="));
+	}
+
 	console.log(`\n${chalk.cyan("🦫 Lets build 🦫")}\n`);
 	console.log(`${chalk.blue("https://github.com/stevedylandev/bhvr")}\n`);
 }
