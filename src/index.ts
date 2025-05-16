@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-ignore: Shebang line
 
 import fs from "fs-extra";
 import path from "node:path";
