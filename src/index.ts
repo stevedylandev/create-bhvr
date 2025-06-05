@@ -3,32 +3,25 @@
 
 import { program } from "commander";
 import chalk from "chalk";
-import { displayBanner, createProject, DEFAULT_REPO } from "./utils";
+import { displayBanner, createProject } from "./utils";
 
 program
-	.name("create-bhvr")
-	.description("Create a bhvr monorepo starter project")
+	.name("create-comet")
+	.description("Create a Next.js application with MongoDB and Mongoose")
 	.argument("[project-directory]", "directory to create the project in")
 	.option("-y, --yes", "skip confirmation prompts")
 	.option("--ts, --typescript", "use TypeScript (default)")
-	.option(
-		"--repo <repo>",
-		"specify a custom GitHub repository as source",
-		DEFAULT_REPO,
-	)
 	.option(
 		"--template <template>",
 		"specify a template (default, tailwind, shadcn)",
 		"default",
 	)
-	.option("--branch <branch>", "specify a branch to use from the repository")
-	.option("--rpc", "use Hono RPC client for type-safe API communication")
 	.action(async (projectDirectory, options) => {
 		try {
 			displayBanner();
 			const result = await createProject(projectDirectory, options);
 			if (result) {
-				console.log(chalk.green.bold("🎉 Project created successfully!"));
+				console.log(chalk.green("Project created successfully!"));
 				console.log("\nNext steps:");
 
 				if (!result.dependenciesInstalled) {
@@ -38,13 +31,11 @@ program
 					console.log(chalk.cyan(`  cd ${result.projectName}`));
 				}
 
-				console.log(chalk.cyan("  bun run dev:client   # Start the client"));
-				console.log(
-					chalk.cyan(
-						"  bun run dev:server   # Start the server in another terminal",
-					),
-				);
-				console.log(chalk.cyan("  bun run dev          # Start all"));
+				console.log(chalk.cyan("  bun dev               # Start the development server"));
+				console.log("\nMake sure to:");
+				console.log(chalk.yellow("  1. Set up your MongoDB connection in .env.local"));
+				console.log(chalk.yellow("  2. Create your MongoDB models in src/models"));
+				console.log(chalk.yellow("  3. Create your API routes in src/app/api"));
 				process.exit(0);
 			}
 		} catch (err) {

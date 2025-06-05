@@ -1,12 +1,12 @@
 {
-	"name": "create-bhvr",
+	"name": "create-comet",
 	"version": "0.3.9",
-	"description": "Create a new bhvr project",
+	"description": "Create a new Next.js project with MongoDB and Mongoose",
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"bin": {
-		"create-bhvr": "./dist/index.js"
+		"create-comet": "./dist/index.js"
 	},
 	"files": ["dist"],
 	"scripts": {
@@ -15,10 +15,11 @@
 	},
 	"keywords": [
 		"bun",
-		"vite",
+		"nextjs",
 		"react",
-		"hono",
-		"monorepo",
+		"mongodb",
+		"mongoose",
+		"fullstack",
 		"starter",
 		"template",
 		"create"

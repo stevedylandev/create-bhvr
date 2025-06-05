@@ -5,21 +5,22 @@ import ora from "ora";
 import path from "node:path";
 import fs from "fs-extra";
 import {
-	honoRpcTemplate,
-	shadcnTemplate,
-	tailwindTemplate,
-	defaultTemplate,
+	mongodbTemplate,
+	exampleModelTemplate,
+	exampleApiTemplate,
+	examplePageTemplate,
+	envTemplate,
+	packageJsonTemplate,
 	TEMPLATES,
 } from "./templates";
 import type { ProjectOptions, ProjectResult } from "../types";
-import degit from "degit";
 import prompts from "prompts";
 
 export const DEFAULT_REPO = "stevedylandev/bhvr";
 
 export function displayBanner() {
 	try {
-		const text = figlet.textSync("bhvr", {
+		const text = figlet.textSync("comet", {
 			font: "Big",
 			horizontalLayout: "default",
 			verticalLayout: "default",
@@ -31,7 +32,7 @@ export function displayBanner() {
 		console.log(chalk.yellowBright(text));
 	} catch (error) {
 		console.log("\n");
-		console.log(chalk.yellowBright("B H V R"));
+		console.log(chalk.yellowBright("COMET"));
 		console.log(chalk.yellow("=========="));
 	}
 
@@ -39,57 +40,89 @@ export function displayBanner() {
 	console.log(`${chalk.blue("https://github.com/stevedylandev/bhvr")}\n`);
 }
 
-export async function patchFilesForRPC(
-	projectPath: string,
-	templateChoice: string,
-): Promise<boolean> {
-	const spinner = ora("Setting up RPC client...").start();
+async function setupNextJsProject(projectPath: string, templateChoice: string): Promise<void> {
+	const spinner = ora("Setting up Next.js project...").start();
 
 	try {
-		// 1. Update client package.json to ensure hono client is installed
-		const clientPkgPath = path.join(projectPath, "client", "package.json");
-		const clientPkg = await fs.readJson(clientPkgPath);
+		// Create necessary directories
+		await fs.ensureDir(path.join(projectPath, "src", "app"));
+		await fs.ensureDir(path.join(projectPath, "src", "lib"));
+		await fs.ensureDir(path.join(projectPath, "src", "models"));
+		await fs.ensureDir(path.join(projectPath, "src", "app", "api"));
+		await fs.ensureDir(path.join(projectPath, "src", "app", "api", "examples"));
 
-		if (!clientPkg.dependencies.hono) {
-			await execa("bun", ["install", "hono"], { cwd: projectPath });
-		}
+		// Write package.json
+		await fs.writeJson(path.join(projectPath, "package.json"), JSON.parse(packageJsonTemplate), { spaces: 2 });
 
-		await fs.writeJson(clientPkgPath, clientPkg, { spaces: 2 });
+		// Write environment variables
+		await fs.writeFile(path.join(projectPath, ".env.local"), envTemplate);
 
-		// 2. Server modification for RPC export type
-		const serverIndexPath = path.join(projectPath, "server", "src", "index.ts");
-		await fs.writeFile(serverIndexPath, honoRpcTemplate, "utf8");
+		// Write MongoDB connection utility
+		await fs.writeFile(path.join(projectPath, "src", "lib", "mongodb.ts"), mongodbTemplate);
 
-		// 3. Update App.tsx based on template selection using switch statement
-		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
+		// Write example model
+		await fs.writeFile(path.join(projectPath, "src", "models", "Example.ts"), exampleModelTemplate);
 
-		// Determine template content based on the template type
-		let updatedAppContent: string;
+		// Write example API route
+		await fs.writeFile(path.join(projectPath, "src", "app", "api", "examples", "route.ts"), exampleApiTemplate);
 
-		// Select template based on choice
-		switch (templateChoice) {
-			case "shadcn":
-				updatedAppContent = shadcnTemplate;
-				break;
-			case "tailwind":
-				updatedAppContent = tailwindTemplate;
-				break;
-			default:
-				updatedAppContent = defaultTemplate;
-				break;
-		}
+		// Write example page
+		await fs.writeFile(path.join(projectPath, "src", "app", "page.tsx"), examplePageTemplate);
 
-		await fs.writeFile(appTsxPath, updatedAppContent, "utf8");
-		spinner.succeed("RPC client setup completed");
-		return true;
-	} catch (err: unknown) {
-		spinner.fail("Failed to set up RPC client");
-		if (err instanceof Error) {
-			console.error(chalk.red("Error:"), err.message);
-		} else {
-			console.error(chalk.red("Error: Unknown error"));
-		}
-		return false;
+		// Write layout file
+		await fs.writeFile(
+			path.join(projectPath, "src", "app", "layout.tsx"),
+			`export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}`
+		);
+
+		// Write tsconfig.json
+		await fs.writeJson(
+			path.join(projectPath, "tsconfig.json"),
+			{
+				compilerOptions: {
+					target: "es5",
+					lib: ["dom", "dom.iterable", "esnext"],
+					allowJs: true,
+					skipLibCheck: true,
+					strict: true,
+					forceConsistentCasingInFileNames: true,
+					noEmit: true,
+					esModuleInterop: true,
+					module: "esnext",
+					moduleResolution: "node",
+					resolveJsonModule: true,
+					isolatedModules: true,
+					jsx: "preserve",
+					incremental: true,
+					plugins: [
+						{
+							name: "next",
+						},
+					],
+					paths: {
+						"@/*": ["./src/*"],
+					},
+				},
+				include: ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+				exclude: ["node_modules"],
+			},
+			{ spaces: 2 }
+		);
+
+		spinner.succeed("Next.js project setup completed");
+	} catch (err) {
+		spinner.fail("Failed to set up Next.js project");
+		throw err;
 	}
 }
 
@@ -104,7 +137,7 @@ export async function createProject(
 			type: "text",
 			name: "projectName",
 			message: "What is the name of your project?",
-			initial: "my-bhvr-app",
+			initial: "comet-app",
 		});
 
 		if (!response.projectName) {
@@ -114,7 +147,7 @@ export async function createProject(
 
 		projectName = response.projectName;
 	} else if (!projectName) {
-		projectName = "my-bhvr-app";
+		projectName = "comet-app";
 	}
 
 	let templateChoice = options.template || "default";
@@ -165,59 +198,8 @@ export async function createProject(
 
 	fs.ensureDirSync(projectPath);
 
-	const repoPath = options.repo || DEFAULT_REPO;
-	const templateConfig =
-		TEMPLATES[templateChoice as keyof typeof TEMPLATES] || TEMPLATES.default;
-	const branch = options.branch || (templateConfig?.branch ?? "main");
-	const repoUrl = `${repoPath}#${branch}`;
-	const spinner = ora("Downloading template...").start();
-
 	try {
-		const emitter = degit(repoUrl, {
-			cache: false,
-			force: true,
-			verbose: false,
-		});
-
-		await emitter.clone(projectPath);
-		spinner.succeed(
-			`Template downloaded successfully (${templateChoice} template)`,
-		);
-
-		const pkgJsonPath = path.join(projectPath, "package.json");
-		if (fs.existsSync(pkgJsonPath)) {
-			const pkgJson = await fs.readJson(pkgJsonPath);
-			pkgJson.name = projectName;
-			await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
-		}
-
-		const gitDir = path.join(projectPath, ".git");
-		if (fs.existsSync(gitDir)) {
-			await fs.remove(gitDir);
-			console.log(chalk.blue("Removed .git directory"));
-		}
-
-		let useRpc = options.rpc;
-
-		if (!options.yes && !options.rpc) {
-			const rpcResponse = await prompts({
-				type: "confirm",
-				name: "useRpc",
-				message: "Use Hono RPC client for type-safe API communication?",
-				initial: false,
-			});
-
-			if (rpcResponse.useRpc === undefined) {
-				console.log(chalk.yellow("Project creation cancelled."));
-				return null;
-			}
-
-			useRpc = rpcResponse.useRpc;
-		}
-
-		if (useRpc) {
-			await patchFilesForRPC(projectPath, templateChoice);
-		}
+		await setupNextJsProject(projectPath, templateChoice);
 
 		let gitInitialized = false;
 
@@ -231,29 +213,22 @@ export async function createProject(
 
 			if (gitResponse.initGit) {
 				try {
-					spinner.start("Initializing git repository...");
+					const spinner = ora("Initializing git repository...").start();
 					await execa("git", ["init"], { cwd: projectPath });
 					spinner.succeed("Git repository initialized");
 					gitInitialized = true;
-				} catch (err: unknown) {
-					spinner.fail(
-						"Failed to initialize git repository. Is git installed?",
-					);
-					if (err instanceof Error) {
-						console.error(chalk.red("Git error:"), err.message);
-					} else {
-						console.error(chalk.red("Git error: Unknown error"));
-					}
+				} catch (err) {
+					console.error(chalk.red("Git error:"), err);
 				}
 			}
 		} else {
 			try {
-				spinner.start("Initializing git repository...");
+				const spinner = ora("Initializing git repository...").start();
 				await execa("git", ["init"], { cwd: projectPath });
 				spinner.succeed("Git repository initialized");
 				gitInitialized = true;
 			} catch (err) {
-				spinner.fail("Failed to initialize git repository. Is git installed?");
+				console.error(chalk.red("Git error:"), err);
 			}
 		}
 
@@ -268,44 +243,33 @@ export async function createProject(
 			});
 
 			if (depsResponse.installDeps) {
-				spinner.start("Installing dependencies...");
+				const spinner = ora("Installing dependencies...").start();
 				try {
 					await execa("bun", ["install"], { cwd: projectPath });
-					spinner.succeed("Dependencies installed with bun");
+					spinner.succeed("Dependencies installed");
 					dependenciesInstalled = true;
-				} catch (bunErr) {
-					try {
-						spinner.text = "Installing dependencies with npm...";
-						await execa("npm", ["install"], { cwd: projectPath });
-						spinner.succeed("Dependencies installed with npm");
-						dependenciesInstalled = true;
-					} catch (npmErr) {
-						spinner.fail("Failed to install dependencies.");
-						console.log(
-							chalk.yellow(
-								"You can install them manually after navigating to the project directory.",
-							),
-						);
-					}
+				} catch (err) {
+					spinner.fail("Failed to install dependencies");
+					console.log(
+						chalk.yellow(
+							"You can install them manually after navigating to the project directory.",
+						),
+					);
 				}
 			}
 		} else {
-			spinner.start("Installing dependencies...");
+			const spinner = ora("Installing dependencies...").start();
 			try {
 				await execa("bun", ["install"], { cwd: projectPath });
-				spinner.succeed("Dependencies installed with bun");
+				spinner.succeed("Dependencies installed");
 				dependenciesInstalled = true;
-			} catch (bunErr) {
-				try {
-					spinner.text = "Installing dependencies with npm...";
-					await execa("npm", ["install"], { cwd: projectPath });
-					spinner.succeed("Dependencies installed with npm");
-					dependenciesInstalled = true;
-				} catch (npmErr) {
-					spinner.fail(
-						"Failed to install dependencies. You can install them manually later.",
-					);
-				}
+			} catch (err) {
+				spinner.fail("Failed to install dependencies");
+				console.log(
+					chalk.yellow(
+						"You can install them manually after navigating to the project directory.",
+					),
+				);
 			}
 		}
 
@@ -316,7 +280,7 @@ export async function createProject(
 			template: templateChoice,
 		};
 	} catch (err) {
-		spinner.fail("Failed to download template");
+		console.error(chalk.red("Error creating project:"), err);
 		throw err;
 	}
 }
