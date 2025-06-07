@@ -56,11 +56,20 @@ export async function patchFilesForRPC(
 
 		await fs.writeJson(clientPkgPath, clientPkg, { spaces: 2 });
 
-		// 2. Server modification for RPC export type
+		// 2. Update server package.json dev script for RPC
+		const serverPkgPath = path.join(projectPath, "server", "package.json");
+		const serverPkg = await fs.readJson(serverPkgPath);
+
+		// Update the dev script to include TypeScript compilation
+		serverPkg.scripts.dev = "bun --watch run src/index.ts & tsc --watch";
+
+		await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
+
+		// 3. Server modification for RPC export type
 		const serverIndexPath = path.join(projectPath, "server", "src", "index.ts");
 		await fs.writeFile(serverIndexPath, honoRpcTemplate, "utf8");
 
-		// 3. Update App.tsx based on template selection using switch statement
+		// 4. Update App.tsx based on template selection using switch statement
 		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
 
 		// Determine template content based on the template type
