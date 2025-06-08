@@ -6,6 +6,7 @@ import path from "node:path";
 import fs from "fs-extra";
 import {
 	honoRpcTemplate,
+	honoClientTemplate,
 	shadcnTemplate,
 	tailwindTemplate,
 	defaultTemplate,
@@ -65,11 +66,20 @@ export async function patchFilesForRPC(
 
 		await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
 
-		// 3. Server modification for RPC export type
+		// 3. Server modification for RPC export type (no client imports)
 		const serverIndexPath = path.join(projectPath, "server", "src", "index.ts");
 		await fs.writeFile(serverIndexPath, honoRpcTemplate, "utf8");
 
-		// 4. Update App.tsx based on template selection using switch statement
+		// 4. Create separate client helper file
+		const clientHelperPath = path.join(
+			projectPath,
+			"server",
+			"src",
+			"client.ts",
+		);
+		await fs.writeFile(clientHelperPath, honoClientTemplate, "utf8");
+
+		// 5. Update App.tsx based on template selection using switch statement
 		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
 
 		// Determine template content based on the template type
