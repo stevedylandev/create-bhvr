@@ -62,7 +62,7 @@ export async function patchFilesForRPC(
 		const serverPkg = await fs.readJson(serverPkgPath);
 
 		// Update the dev script to include TypeScript compilation
-		serverPkg.scripts.dev = "bun --watch run src/index.ts & tsc --watch";
+		serverPkg.scripts.dev = "bun --watch run src/index.ts && tsc --watch";
 
 		await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
 
