@@ -1,6 +1,6 @@
 {
 	"name": "create-bhvr",
-	"version": "0.3.11",
+	"version": "0.3.12",
 	"description": "Create a new bhvr project",
 	"type": "module",
 	"main": "./dist/index.js",
@@ -8,7 +8,9 @@
 	"bin": {
 		"create-bhvr": "./dist/index.js"
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "bun build src/index.ts --outdir dist --target node",
 		"start": "bun ./dist/index.js"
