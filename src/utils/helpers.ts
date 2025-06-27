@@ -10,6 +10,9 @@ import {
 	shadcnTemplate,
 	tailwindTemplate,
 	defaultTemplate,
+	shadcnTemplateWithQuery,
+	tailwindTemplateWithQuery,
+	defaultTemplateWithQuery,
 	TEMPLATES,
 } from "./templates";
 import type { ProjectOptions, ProjectResult } from "../types";
@@ -17,6 +20,77 @@ import degit from "degit";
 import prompts from "prompts";
 
 export const DEFAULT_REPO = "stevedylandev/bhvr";
+
+export async function setupTanStackQuery(projectPath: string, templateChoice?: string): Promise<boolean> {
+	const spinner = ora("Setting up TanStack Query...").start();
+
+	try {
+		// 1. Install TanStack Query and devtools in the client
+		const clientPath = path.join(projectPath, "client");
+		await execa("bun", ["add", "@tanstack/react-query"], { cwd: clientPath });
+		await execa("bun", ["add", "-D", "@tanstack/react-query-devtools"], { cwd: clientPath });
+
+		// 2. Update client's main.tsx to include QueryClient provider
+		const mainTsxPath = path.join(clientPath, "src", "main.tsx");
+		const mainTsxContent = `import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import App from './App.tsx'
+import './index.css'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  </React.StrictMode>,
+)`;
+
+		await fs.writeFile(mainTsxPath, mainTsxContent, "utf8");
+
+		// 3. Update App.tsx with TanStack Query template based on template choice
+		if (templateChoice) {
+			const appTsxPath = path.join(clientPath, "src", "App.tsx");
+			
+			let updatedAppContent: string;
+			switch (templateChoice) {
+				case "shadcn":
+					updatedAppContent = shadcnTemplateWithQuery;
+					break;
+				case "tailwind":
+					updatedAppContent = tailwindTemplateWithQuery;
+					break;
+				default:
+					updatedAppContent = defaultTemplateWithQuery;
+					break;
+			}
+			
+			await fs.writeFile(appTsxPath, updatedAppContent, "utf8");
+		}
+
+		spinner.succeed("TanStack Query setup completed");
+		return true;
+	} catch (err: unknown) {
+		spinner.fail("Failed to set up TanStack Query");
+		if (err instanceof Error) {
+			console.error(chalk.red("Error:"), err.message);
+		} else {
+			console.error(chalk.red("Error: Unknown error"));
+		}
+		return false;
+	}
+}
 
 export function displayBanner() {
 	try {
@@ -236,6 +310,28 @@ export async function createProject(
 
 		if (useRpc) {
 			await patchFilesForRPC(projectPath, templateChoice);
+		}
+
+		let useTanStackQuery = options.query;
+
+		if (!options.yes && !options.query) {
+			const queryResponse = await prompts({
+				type: "confirm",
+				name: "useTanStackQuery",
+				message: "Include TanStack Query for data fetching?",
+				initial: false,
+			});
+
+			if (queryResponse.useTanStackQuery === undefined) {
+				console.log(chalk.yellow("Project creation cancelled."));
+				return null;
+			}
+
+			useTanStackQuery = queryResponse.useTanStackQuery;
+		}
+
+		if (useTanStackQuery) {
+			await setupTanStackQuery(projectPath, templateChoice);
 		}
 
 		let gitInitialized = false;
