@@ -1,15 +1,15 @@
 import type { TemplateInfo } from "../types";
 
 export const TEMPLATES: Record<string, TemplateInfo> = {
-	default: {
-		branch: "main",
-		description: "Basic setup with Bun, Hono, Vite and React",
-	},
-	tailwind: { branch: "tailwindcss", description: "Basic setup + TailwindCSS" },
-	shadcn: {
-		branch: "shadcn-ui",
-		description: "Basic setup + TailwindCSS + shadcn/ui",
-	},
+  default: {
+    branch: "main",
+    description: "Basic setup with Bun, Hono, Vite and React",
+  },
+  tailwind: { branch: "tailwindcss", description: "Basic setup + TailwindCSS" },
+  shadcn: {
+    branch: "shadcn-ui",
+    description: "Basic setup + TailwindCSS + shadcn/ui",
+  },
 };
 
 export const honoRpcTemplate = `import { Hono } from "hono";
@@ -400,13 +400,13 @@ function App() {
       <p>A typesafe fullstack monorepo with TanStack Query</p>
       <p className="text-sm text-gray-500">💡 Open React Query DevTools (bottom-left) to inspect queries</p>
       <div className='flex items-center gap-4'>
-        <Button 
+        <Button
           onClick={() => refetch()}
           disabled={isLoading}
         >
           {isLoading ? 'Loading...' : 'Call API'}
         </Button>
-        <Button 
+        <Button
           variant="outline"
           asChild
         >
@@ -433,3 +433,21 @@ function App() {
 }
 
 export default App`;
+
+export const queryMainTemplate = `import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import App from './App.tsx'
+import './index.css'
+
+const queryClient = new QueryClient()
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  </React.StrictMode>,
+)`;
