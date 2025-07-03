@@ -10,6 +10,7 @@ export interface ProjectOptions {
 	template?: string;
 	branch?: string;
 	rpc?: boolean;
+	query?: boolean;
 }
 
 export interface ProjectResult {

@@ -23,6 +23,7 @@ program
 	)
 	.option("--branch <branch>", "specify a branch to use from the repository")
 	.option("--rpc", "use Hono RPC client for type-safe API communication")
+	.option("--query", "include TanStack Query for data fetching")
 	.action(async (projectDirectory, options) => {
 		try {
 			displayBanner();
