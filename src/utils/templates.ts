@@ -268,16 +268,13 @@ function App() {
       </div>
       <h1>bhvr</h1>
       <h2>Bun + Hono + Vite + React</h2>
-      <p>A typesafe fullstack monorepo with TanStack Query</p>
-      <p className="text-sm text-gray-600">💡 Open React Query DevTools (bottom-left) to inspect queries</p>
+      <p>A typesafe fullstack monorepo</p>
       <div className="card">
         <div className='button-container'>
           <button onClick={() => refetch()} disabled={isLoading}>
             {isLoading ? 'Loading...' : 'Call API'}
           </button>
-          <a className='docs-link' target='_blank' href="https://tanstack.com/query/latest/docs/framework/react/overview">
-            TanStack Query Docs
-          </a>
+          <a className='docs-link' target='_blank' href="https://bhvr.dev">Docs</a>
         </div>
         {error && (
           <pre className='response error'>
@@ -331,8 +328,7 @@ function App() {
       </a>
       <h1 className="text-5xl font-black">bhvr</h1>
       <h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
-      <p>A typesafe fullstack monorepo with TanStack Query</p>
-      <p className="text-sm text-gray-500">💡 Open React Query DevTools (bottom-left) to inspect queries</p>
+      <p>A typesafe fullstack monorepo</p>
       <div className='flex items-center gap-4'>
         <button
           onClick={() => refetch()}
@@ -341,8 +337,8 @@ function App() {
         >
           {isLoading ? 'Loading...' : 'Call API'}
         </button>
-        <a target='_blank' href="https://tanstack.com/query/latest/docs/framework/react/overview" className='border-1 border-black text-black px-2.5 py-1.5 rounded-md'>
-          TanStack Query Docs
+        <a target='_blank' href="https://bhvr.dev" className='border-1 border-black text-black px-2.5 py-1.5 rounded-md'>
+          Docs
         </a>
       </div>
       {error && (
@@ -397,8 +393,7 @@ function App() {
       </a>
       <h1 className="text-5xl font-black">bhvr</h1>
       <h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
-      <p>A typesafe fullstack monorepo with TanStack Query</p>
-      <p className="text-sm text-gray-500">💡 Open React Query DevTools (bottom-left) to inspect queries</p>
+      <p>A typesafe fullstack monorepo</p>
       <div className='flex items-center gap-4'>
         <Button
           onClick={() => refetch()}
@@ -410,8 +405,8 @@ function App() {
           variant="outline"
           asChild
         >
-          <a target='_blank' href="https://tanstack.com/query/latest/docs/framework/react/overview">
-          TanStack Query Docs
+          <a target='_blank' href="https://bhvr.dev">
+          Docs
           </a>
         </Button>
       </div>
