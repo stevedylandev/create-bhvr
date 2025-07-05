@@ -3,14 +3,15 @@ export interface TemplateInfo {
 	description: string;
 }
 
-export interface ProjectOptions {
+export type ProjectOptions = {
 	yes?: boolean;
 	typescript?: boolean;
 	repo?: string;
 	template?: string;
 	branch?: string;
 	rpc?: boolean;
-}
+	linter?: 'eslint' | 'biome';
+};
 
 export interface ProjectResult {
 	projectName: string;
