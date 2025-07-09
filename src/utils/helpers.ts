@@ -318,13 +318,13 @@ export async function createProject(
           await execa("bun", ["install"], { cwd: projectPath });
           spinner.succeed("Dependencies installed with bun");
           dependenciesInstalled = true;
-        } catch (bunErr) {
+        } catch (_bunErr) {
           try {
             spinner.text = "Installing dependencies with npm...";
             await execa("npm", ["install"], { cwd: projectPath });
             spinner.succeed("Dependencies installed with npm");
             dependenciesInstalled = true;
-          } catch (npmErr) {
+          } catch (_npmErr) {
             spinner.fail("Failed to install dependencies.");
             console.log(
               chalk.yellow(
@@ -340,13 +340,13 @@ export async function createProject(
         await execa("bun", ["install"], { cwd: projectPath });
         spinner.succeed("Dependencies installed with bun");
         dependenciesInstalled = true;
-      } catch (bunErr) {
+      } catch (_bunErr) {
         try {
           spinner.text = "Installing dependencies with npm...";
           await execa("npm", ["install"], { cwd: projectPath });
           spinner.succeed("Dependencies installed with npm");
           dependenciesInstalled = true;
-        } catch (npmErr) {
+        } catch (_npmErr) {
           spinner.fail(
             "Failed to install dependencies. You can install them manually later.",
           );
@@ -382,7 +382,7 @@ export async function setupBiome(projectPath: string): Promise<void> {
     const clientPkgJson = await fs.readJson(clientPkgJsonPath);
     const devDependencies = clientPkgJson.devDependencies || {};
     const eslintDeps = Object.keys(devDependencies).filter(
-      (dep) => dep.startsWith("eslint") || dep.startsWith("@eslint"),
+      (dep) => dep.includes("eslint") || dep.includes("@eslint"),
     );
 
     if (eslintDeps.length > 0) {
@@ -390,11 +390,11 @@ export async function setupBiome(projectPath: string): Promise<void> {
       await execa("bun", ["remove", ...eslintDeps], { cwd: clientPath });
     }
 
-    // Install Biome
+    // Install Biome in the root of the project
     spinner.text = "Installing Biome...";
-    await execa("bun", ["add", "-D", "@biomejs/biome"], { cwd: clientPath });
+    await execa("bun", ["add", "-D", "@biomejs/biome"], { cwd: projectPath });
 
-    // Create biome.json in client workspace
+    // Create biome.json in the root of the project
     spinner.text = "Creating biome.json...";
     const biomeConfig = {
       $schema: "https://biomejs.dev/schemas/1.7.3/schema.json",
@@ -413,16 +413,27 @@ export async function setupBiome(projectPath: string): Promise<void> {
         },
       },
     };
-    const biomeConfigPath = path.join(clientPath, "biome.json");
+    const biomeConfigPath = path.join(projectPath, "biome.json");
     await fs.writeJson(biomeConfigPath, biomeConfig, { spaces: 2 });
 
-    // Update client package.json scripts
+    // Update client package.json scripts to remove lint
     spinner.text = "Updating scripts in client/package.json...";
     const newClientPkgJson = await fs.readJson(clientPkgJsonPath);
-    delete newClientPkgJson.scripts.lint; // Remove old lint script
-    newClientPkgJson.scripts.format = "biome format . --write";
-    newClientPkgJson.scripts.lint = "biome lint .";
+    if (newClientPkgJson.scripts || newClientPkgJson.scripts.lint) {
+      delete newClientPkgJson.scripts.lint;
+    }
     await fs.writeJson(clientPkgJsonPath, newClientPkgJson, { spaces: 2 });
+
+    // Update root package.json with biome scripts
+    spinner.text = "Updating scripts in root/package.json...";
+    const rootPkgJsonPath = path.join(projectPath, "package.json");
+    if (fs.existsSync(rootPkgJsonPath)) {
+      const rootPkgJson = await fs.readJson(rootPkgJsonPath);
+      rootPkgJson.scripts = rootPkgJson.scripts || {};
+      rootPkgJson.scripts.format = "biome format . --write";
+      rootPkgJson.scripts.lint = "biome lint .";
+      await fs.writeJson(rootPkgJsonPath, rootPkgJson, { spaces: 2 });
+    }
 
     spinner.succeed("Biome setup complete.");
   } catch (error) {
