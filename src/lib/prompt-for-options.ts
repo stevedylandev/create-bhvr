@@ -6,7 +6,7 @@ import { tryCatch } from "@/utils/try-catch";
 
 export async function promptForOptions(
   options: ProjectOptions,
-): Promise<ProjectOptions | null> {
+): Promise<ProjectOptions> {
   let projectName = options.projectName;
 
   if (!projectName && !options.yes) {
@@ -21,7 +21,7 @@ export async function promptForOptions(
 
     if (!data || error) {
       consola.error(pc.red("Project creation cancelled."));
-      return null;
+      process.exit(1);
     }
 
     projectName = data;
@@ -46,7 +46,7 @@ export async function promptForOptions(
 
     if (!data || error) {
       consola.error("Project creation cancelled.");
-      return null;
+      process.exit(1);
     }
 
     templateChoice = data;
@@ -64,7 +64,7 @@ export async function promptForOptions(
 
     if (error) {
       consola.error("Project creation cancelled.");
-      return null;
+      process.exit(1);
     }
 
     useRpc = rpcResponse;
@@ -87,7 +87,7 @@ export async function promptForOptions(
 
     if (error) {
       console.log(pc.yellow("Project creation cancelled."));
-      return null;
+      process.exit(1);
     }
 
     linter = linterResponse as "eslint" | "biome";

@@ -1,7 +1,7 @@
 import { consola } from "consola";
 import { execa } from "execa";
-import ora from "ora";
 import pc from "picocolors";
+import yoctoSpinner from "yocto-spinner";
 import { tryCatch } from "@/utils/try-catch";
 
 async function getPackageManager(): Promise<"bun"> {
@@ -40,16 +40,17 @@ export async function installDependencies(
   }
 
   const packageManager = await getPackageManager();
-  const spinner = ora(
-    `Installing dependencies with ${packageManager}...`,
-  ).start();
+
+  const spinner = yoctoSpinner({
+    text: `Installing dependencies with ${packageManager}...`,
+  }).start();
 
   try {
     await execa(packageManager, ["install"], { cwd: projectPath });
-    spinner.succeed(`Dependencies installed with ${packageManager}`);
+    spinner.success(`Dependencies installed with ${packageManager}`);
     return true;
   } catch (_err) {
-    spinner.fail("Failed to install dependencies.");
+    spinner.error("Failed to install dependencies.");
     console.log(
       pc.yellow(
         "You can install them manually after navigating to the project directory.",

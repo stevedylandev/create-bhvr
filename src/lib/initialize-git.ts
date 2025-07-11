@@ -1,7 +1,7 @@
 import { consola } from "consola";
 import { execa } from "execa";
-import ora from "ora";
 import pc from "picocolors";
+import yoctoSpinner from "yocto-spinner";
 import { tryCatch } from "@/utils/try-catch";
 
 export async function initializeGit(
@@ -27,13 +27,16 @@ export async function initializeGit(
     }
   }
 
-  const spinner = ora("Initializing git repository...").start();
+  const spinner = yoctoSpinner({
+    text: "Initializing git repository...",
+  }).start();
+
   try {
     await execa("git", ["init"], { cwd: projectPath });
-    spinner.succeed("Git repository initialized");
+    spinner.success("Git repository initialized");
     return true;
   } catch (err: unknown) {
-    spinner.fail("Failed to initialize git repository. Is git installed?");
+    spinner.error("Failed to initialize git repository. Is git installed?");
     if (err instanceof Error) {
       consola.error(pc.red("Git error:"), err.message);
     } else {

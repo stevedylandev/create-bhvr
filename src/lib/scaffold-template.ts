@@ -1,8 +1,8 @@
 import path from "node:path";
 import degit from "degit";
 import fs from "fs-extra";
-import ora from "ora";
 import pc from "picocolors";
+import yoctoSpinner from "yocto-spinner";
 import type { ProjectOptions } from "@/types";
 import { DEFAULT_REPO } from "@/utils/constants";
 import { TEMPLATES } from "@/utils/templates";
@@ -10,9 +10,10 @@ import { patchFilesForRPC } from "./patch-files-rpc";
 import { setupBiome } from "./setup-biome";
 
 export async function scaffoldTemplate(
-  options: ProjectOptions,
+  options: Required<ProjectOptions>,
 ): Promise<boolean> {
   const { projectName, template, repo, branch, rpc, linter } = options;
+
   const projectPath = path.resolve(process.cwd(), projectName);
 
   if (fs.existsSync(projectPath)) {
@@ -29,7 +30,7 @@ export async function scaffoldTemplate(
     TEMPLATES[template as keyof typeof TEMPLATES] || TEMPLATES.default;
   const repoBranch = branch || (templateConfig?.branch ?? "main");
   const repoUrl = `${repoPath}#${repoBranch}`;
-  const spinner = ora("Downloading template...").start();
+  const spinner = yoctoSpinner({ text: "Downloading template..." }).start();
 
   try {
     const emitter = degit(repoUrl, {
@@ -39,7 +40,7 @@ export async function scaffoldTemplate(
     });
 
     await emitter.clone(projectPath);
-    spinner.succeed(`Template downloaded successfully (${template} template)`);
+    spinner.success(`Template downloaded successfully (${template} template)`);
 
     const pkgJsonPath = path.join(projectPath, "package.json");
     if (fs.existsSync(pkgJsonPath)) {
@@ -64,7 +65,7 @@ export async function scaffoldTemplate(
 
     return true;
   } catch (err) {
-    spinner.fail("Failed to download template");
+    spinner.error("Failed to download template");
     throw err;
   }
 }

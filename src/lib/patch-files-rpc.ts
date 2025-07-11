@@ -2,8 +2,8 @@ import path from "node:path";
 import { consola } from "consola";
 import { execa } from "execa";
 import fs from "fs-extra";
-import ora from "ora";
 import pc from "picocolors";
+import yoctoSpinner from "yocto-spinner";
 import {
   defaultTemplate,
   honoClientTemplate,
@@ -16,7 +16,7 @@ export async function patchFilesForRPC(
   projectPath: string,
   templateChoice: string,
 ): Promise<boolean> {
-  const spinner = ora("Setting up RPC client...").start();
+  const spinner = yoctoSpinner({ text: "Setting up RPC client..." }).start();
 
   try {
     // 1. Update client package.json to ensure hono client is installed
@@ -71,10 +71,10 @@ export async function patchFilesForRPC(
     }
 
     await fs.writeFile(appTsxPath, updatedAppContent, "utf8");
-    spinner.succeed("RPC client setup completed");
+    spinner.success("RPC client setup completed");
     return true;
   } catch (err: unknown) {
-    spinner.fail("Failed to set up RPC client");
+    spinner.error("Failed to set up RPC client");
     if (err instanceof Error) {
       consola.error(pc.red("Error:"), err.message);
     } else {

@@ -1,11 +1,11 @@
 import path from "node:path";
 import { execa } from "execa";
 import fs from "fs-extra";
-import ora from "ora";
 import pc from "picocolors";
+import yoctoSpinner from "yocto-spinner";
 
 export async function setupBiome(projectPath: string): Promise<void> {
-  const spinner = ora("Setting up Biome...").start();
+  const spinner = yoctoSpinner({ text: "Setting up Biome..." }).start();
   try {
     const clientPath = path.join(projectPath, "client");
     const clientPkgJsonPath = path.join(clientPath, "package.json");
@@ -73,9 +73,9 @@ export async function setupBiome(projectPath: string): Promise<void> {
       await fs.writeJson(rootPkgJsonPath, rootPkgJson, { spaces: 2 });
     }
 
-    spinner.succeed("Biome setup complete.");
+    spinner.success("Biome setup complete.");
   } catch (error) {
-    spinner.fail("Biome setup failed.");
+    spinner.error("Biome setup failed.");
     if (error instanceof Error) {
       console.error(pc.red("\nError:"), error.message);
     } else {
