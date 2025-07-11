@@ -2,8 +2,8 @@
 
 ![cover](https://cdn.stevedylan.dev/ipfs/bafybeievx27ar5qfqyqyud7kemnb5n2p4rzt2matogi6qttwkpxonqhra4)
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/0xZ0uk/create-vhs/blob/main/LICENSE)
-[![create-bhvr version](https://img.shields.io/npm/v/create-bhvr.svg?label=%20)]
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/stevedylandev/create-bhvr/blob/main/LICENSE)
+![create-bhvr version](https://img.shields.io/npm/v/create-bhvr.svg?label=%20)
 
 A command-line interface (CLI) to quickly scaffold a new `bhvr` project. `bhvr` is a full-stack TypeScript monorepo starter with shared types, using Bun, Hono, Vite, and React.
 
@@ -61,5 +61,5 @@ Please read our [**CONTRIBUTING.md**](CONTRIBUTING.md) for detailed guidelines o
 ## Links
 
 - [License (MIT)](LICENSE)
-- []
+- [Contributing](CONTRIBUTING.md)
 - [Website](https://bhvr.dev)
