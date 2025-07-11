@@ -24,18 +24,18 @@ export async function createProject(
   }
 
   const gitInitialized = await initializeGit(
-    projectOptions.projectName,
+    projectOptions.projectName ?? projectDirectory,
     projectOptions.yes,
   );
   const dependenciesInstalled = await installDependencies(
-    projectOptions.projectName,
+    projectOptions.projectName ?? projectDirectory,
     projectOptions.yes,
   );
 
   return {
-    projectName: projectOptions.projectName,
+    projectName: projectOptions.projectName ?? projectDirectory,
     gitInitialized,
     dependenciesInstalled,
-    template: projectOptions.template,
+    template: projectOptions.template ?? "default",
   };
 }

@@ -8,14 +8,14 @@ async function getPackageManager(): Promise<"bun" | "pnpm" | "npm"> {
   try {
     await execa("bun", ["--version"]);
     return "bun";
-  } catch (e) {
+  } catch (_e) {
     // bun is not installed
   }
 
   try {
     await execa("pnpm", ["--version"]);
     return "pnpm";
-  } catch (e) {
+  } catch (_e) {
     // pnpm is not installed
   }
 
@@ -54,7 +54,7 @@ export async function installDependencies(
     await execa(packageManager, ["install"], { cwd: projectPath });
     spinner.succeed(`Dependencies installed with ${packageManager}`);
     return true;
-  } catch (err) {
+  } catch (_err) {
     spinner.fail("Failed to install dependencies.");
     console.log(
       pc.yellow(
