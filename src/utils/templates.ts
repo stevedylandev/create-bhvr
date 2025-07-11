@@ -1,4 +1,4 @@
-import type { TemplateInfo } from "../types";
+import type { TemplateInfo } from "@/types";
 
 export const TEMPLATES: Record<string, TemplateInfo> = {
 	default: {
