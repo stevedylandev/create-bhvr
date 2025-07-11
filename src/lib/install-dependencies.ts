@@ -4,22 +4,16 @@ import ora from "ora";
 import pc from "picocolors";
 import { tryCatch } from "@/utils/try-catch";
 
-async function getPackageManager(): Promise<"bun" | "pnpm" | "npm"> {
-  try {
-    await execa("bun", ["--version"]);
-    return "bun";
-  } catch (_e) {
-    // bun is not installed
+async function getPackageManager(): Promise<"bun"> {
+  const { error } = await tryCatch(execa("bun", ["--version"]));
+
+  if (!error) {
+    consola.error(new Error("Bun is not installed."));
+    consola.warn("Please install bun from https://bun.sh/");
+    process.exit(1);
   }
 
-  try {
-    await execa("pnpm", ["--version"]);
-    return "pnpm";
-  } catch (_e) {
-    // pnpm is not installed
-  }
-
-  return "npm";
+  return "bun";
 }
 
 export async function installDependencies(
