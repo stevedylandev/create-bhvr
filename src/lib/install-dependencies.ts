@@ -7,7 +7,7 @@ import { tryCatch } from "@/utils/try-catch";
 async function getPackageManager(): Promise<"bun"> {
   const { error } = await tryCatch(execa("bun", ["--version"]));
 
-  if (!error) {
+  if (error) {
     consola.error(new Error("Bun is not installed."));
     consola.warn("Please install bun from https://bun.sh/");
     process.exit(1);
