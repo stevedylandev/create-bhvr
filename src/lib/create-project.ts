@@ -27,6 +27,7 @@ export async function createProject(
     projectOptions.projectName ?? projectDirectory,
     projectOptions.yes,
   );
+
   const dependenciesInstalled = await installDependencies(
     projectOptions.projectName ?? projectDirectory,
     projectOptions.yes,
