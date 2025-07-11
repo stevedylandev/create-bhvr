@@ -16,6 +16,8 @@ To create a new `bhvr` project, run any of the following commands and follow the
 bun create bhvr my-bhvr-app
 ```
 
+You can use `create-bhvr` with other package managers, but we highly recommend you stick with Bun.
+
 ```bash
 # Using PNPM
 pnpm create bhvr my-bhvr-app
