@@ -1,9 +1,10 @@
 #!/usr/bin/env node
+
 // @ts-ignore: Shebang line
 
-import { program } from "commander";
-import chalk from "chalk";
-import { displayBanner, createProject, DEFAULT_REPO } from "./utils";
+import { create } from "@/commands/create";
+import { program } from "@/program";
+import { DEFAULT_REPO } from "./utils";
 
 program
   .name("create-bhvr")
@@ -23,35 +24,7 @@ program
   )
   .option("--branch <branch>", "specify a branch to use from the repository")
   .option("--rpc", "use Hono RPC client for type-safe API communication")
-	.option("--linter <linter>", "specify the linter to use (eslint or biome)")
-	.action(async (projectDirectory, options) => {
-    try {
-      displayBanner();
-      const result = await createProject(projectDirectory, options);
-      if (result) {
-        console.log(chalk.green.bold("🎉 Project created successfully!"));
-        console.log("\nNext steps:");
-
-        if (!result.dependenciesInstalled) {
-          console.log(chalk.cyan(`  cd ${result.projectName}`));
-          console.log(chalk.cyan("  bun install"));
-        } else {
-          console.log(chalk.cyan(`  cd ${result.projectName}`));
-        }
-
-        console.log(chalk.cyan("  bun run dev:client   # Start the client"));
-        console.log(
-          chalk.cyan(
-            "  bun run dev:server   # Start the server in another terminal",
-          ),
-        );
-        console.log(chalk.cyan("  bun run dev          # Start all"));
-        process.exit(0);
-      }
-    } catch (err) {
-      console.error(chalk.red("Error creating project:"), err);
-      process.exit(1);
-    }
-  });
+  .option("--linter <linter>", "specify the linter to use (eslint or biome)")
+  .action(create);
 
 program.parse();
