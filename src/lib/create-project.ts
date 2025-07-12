@@ -5,38 +5,38 @@ import { promptForOptions } from "./prompt-for-options";
 import { scaffoldTemplate } from "./scaffold-template";
 
 export async function createProject(
-  projectDirectory: string,
-  options: ProjectOptions,
+	projectDirectory: string,
+	options: ProjectOptions,
 ): Promise<ProjectResult | null> {
-  const projectOptions = await promptForOptions({
-    ...options,
-    projectName: projectDirectory,
-  });
+	const projectOptions = await promptForOptions({
+		...options,
+		projectName: projectDirectory,
+	});
 
-  if (!projectOptions) {
-    return null;
-  }
+	if (!projectOptions) {
+		return null;
+	}
 
-  const scaffolded = await scaffoldTemplate(projectOptions);
+	const scaffolded = await scaffoldTemplate(projectOptions);
 
-  if (!scaffolded) {
-    return null;
-  }
+	if (!scaffolded) {
+		return null;
+	}
 
-  const gitInitialized = await initializeGit(
-    projectOptions.projectName ?? projectDirectory,
-    projectOptions.yes,
-  );
+	const gitInitialized = await initializeGit(
+		projectOptions.projectName ?? projectDirectory,
+		projectOptions.yes,
+	);
 
-  const dependenciesInstalled = await installDependencies(
-    projectOptions.projectName ?? projectDirectory,
-    projectOptions.yes,
-  );
+	const dependenciesInstalled = await installDependencies(
+		projectOptions.projectName ?? projectDirectory,
+		projectOptions.yes,
+	);
 
-  return {
-    projectName: projectOptions.projectName ?? projectDirectory,
-    gitInitialized,
-    dependenciesInstalled,
-    template: projectOptions.template ?? "default",
-  };
+	return {
+		projectName: projectOptions.projectName ?? projectDirectory,
+		gitInitialized,
+		dependenciesInstalled,
+		template: projectOptions.template ?? "default",
+	};
 }
