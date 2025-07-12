@@ -10,6 +10,6 @@ export const shadcnUiExtension: Extension = {
 	version: "1.0.0",
 	add: addShadcnUi,
 	remove: removeShadcnUi,
-	tag: "styling",
+	tag: "extra",
 	dependsOn: [tailwindcssExtension],
 };

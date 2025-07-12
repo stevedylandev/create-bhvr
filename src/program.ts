@@ -6,4 +6,4 @@ export const program = new Command()
 	.option("--rpc", "Use Hono RPC")
 	.option("--linter <linter>", "Linter to use (eslint or biome)")
 	.option("--style <style>", "Styling solution to use (tailwindcss)")
-	.option("--extras <extras>", "Extras to include (shadcn-ui)");
+	.option("--extras <extras...>", "Extras to include (shadcn-ui)");

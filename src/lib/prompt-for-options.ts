@@ -108,7 +108,7 @@ export async function promptForOptions(
 
 	let extras = options.extras;
 
-	if (!options.yes && !options.extras) {
+	if (!options.yes && (!options.extras || options.extras.length === 0)) {
 		const { data: extrasResponse, error } = await tryCatch(
 			consola.prompt("Select additional features to include:", {
 				type: "multiselect",

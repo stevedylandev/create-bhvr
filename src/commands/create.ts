@@ -1,15 +1,16 @@
 import pc from "picocolors";
 import { displayBanner } from "@/lib/display-banner";
-import type { ProjectOptions } from "@/types";
+import type { Extension, ProjectOptions } from "@/types";
 import { createProject } from "../lib/create-project";
 
 export const create = async (
 	projectDirectory: string,
 	options: ProjectOptions,
+	extensions: Extension[],
 ) => {
 	try {
 		displayBanner();
-		const result = await createProject(projectDirectory, options);
+		const result = await createProject(projectDirectory, options, extensions);
 		if (result) {
 			console.log(pc.green(pc.bold("🎉 Project created successfully!")));
 			console.log("\nNext steps:");

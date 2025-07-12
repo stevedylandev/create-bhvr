@@ -1,6 +1,4 @@
-import { shadcnUiExtension } from "@/extensions/shadcn-ui";
-import { tailwindcssExtension } from "@/extensions/tailwindcss";
-import type { ProjectOptions, ProjectResult } from "@/types";
+import type { Extension, ProjectOptions, ProjectResult } from "@/types";
 import { initializeGit } from "./initialize-git";
 import { installDependencies } from "./install-dependencies";
 import { promptForOptions } from "./prompt-for-options";
@@ -9,6 +7,7 @@ import { scaffoldTemplate } from "./scaffold-template";
 export async function createProject(
 	projectDirectory: string,
 	options: ProjectOptions,
+	extensions: Extension[],
 ): Promise<ProjectResult | null> {
 	const projectOptions = await promptForOptions({
 		...options,
@@ -25,14 +24,16 @@ export async function createProject(
 		return null;
 	}
 
-	if (projectOptions.style === "tailwindcss") {
-		await tailwindcssExtension.add(
-			projectOptions.projectName ?? projectDirectory,
-		);
-	}
-
-	if (projectOptions.extras?.includes("shadcn-ui")) {
-		await shadcnUiExtension.add(projectOptions.projectName ?? projectDirectory);
+	for (const extension of extensions) {
+		if (
+			(extension.tag === "styling" && projectOptions.style === extension.id) ||
+			(extension.tag === "linter" && projectOptions.linter === extension.id) ||
+			(extension.tag === "extra" &&
+				// biome-ignore lint/suspicious/noExplicitAny: Needed to make extensions scale without typing all extension IDs.
+				projectOptions.extras?.includes(extension.id as any))
+		) {
+			await extension.add(projectOptions.projectName ?? projectDirectory);
+		}
 	}
 
 	const gitInitialized = await initializeGit(

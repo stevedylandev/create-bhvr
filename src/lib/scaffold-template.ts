@@ -11,7 +11,7 @@ import { patchFilesForRPC } from "./patch-files-rpc";
 export async function scaffoldTemplate(
 	options: Required<ProjectOptions>,
 ): Promise<boolean> {
-	const { projectName, repo, branch, rpc, linter } = options;
+	const { projectName, repo, branch, rpc, linter, extras } = options;
 
 	const projectPath = path.resolve(process.cwd(), projectName);
 

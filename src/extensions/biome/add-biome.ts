@@ -34,8 +34,44 @@ export async function addBiome(projectPath: string): Promise<void> {
 
 		// Create biome.json in the root of the project
 		spinner.text = "Creating biome.json...";
-		const templateBiomeConfigPath = path.join(__dirname, "biome.json");
-		const biomeConfig = await fs.readJson(templateBiomeConfigPath);
+		const biomeConfig = {
+			"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+			"vcs": {
+				"enabled": false,
+				"clientKind": "git",
+				"useIgnoreFile": false
+			},
+			"files": {
+				"ignoreUnknown": false
+			},
+			"formatter": {
+				"enabled": true,
+				"indentStyle": "tab"
+			},
+			"linter": {
+				"enabled": true,
+				"rules": {
+					"performance": {
+						"noImgElement": "off"
+					},
+					"recommended": true
+				}
+			},
+			"javascript": {
+				"formatter": {
+					"quoteStyle": "double"
+				}
+			},
+			"assist": {
+				"enabled": true,
+				"actions": {
+					"source": {
+						"organizeImports": "on"
+					}
+				}
+			},
+			"extends": ["ultracite"]
+		};
 
 		const biomeConfigPath = path.join(projectPath, "biome.json");
 		await fs.writeJson(biomeConfigPath, biomeConfig, { spaces: 2 });
