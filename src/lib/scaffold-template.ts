@@ -3,10 +3,10 @@ import degit from "degit";
 import fs from "fs-extra";
 import pc from "picocolors";
 import yoctoSpinner from "yocto-spinner";
+import { biomeExtension } from "@/extensions/biome";
 import type { ProjectOptions } from "@/types";
 import { DEFAULT_REPO } from "@/utils/constants";
 import { patchFilesForRPC } from "./patch-files-rpc";
-import { setupBiome } from "./setup-biome";
 
 export async function scaffoldTemplate(
 	options: Required<ProjectOptions>,
@@ -57,7 +57,7 @@ export async function scaffoldTemplate(
 		}
 
 		if (linter === "biome") {
-			await setupBiome(projectPath);
+			await biomeExtension.add(projectPath);
 		}
 
 		return true;

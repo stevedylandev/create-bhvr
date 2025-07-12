@@ -1,3 +1,4 @@
+import { tailwindcssExtension } from "@/extensions/tailwindcss";
 import type { ProjectOptions, ProjectResult } from "@/types";
 import { initializeGit } from "./initialize-git";
 import { installDependencies } from "./install-dependencies";
@@ -23,6 +24,12 @@ export async function createProject(
 		return null;
 	}
 
+	if (projectOptions.style === "tailwindcss") {
+		await tailwindcssExtension.add(
+			projectOptions.projectName ?? projectDirectory,
+		);
+	}
+
 	const gitInitialized = await initializeGit(
 		projectOptions.projectName ?? projectDirectory,
 		projectOptions.yes,
@@ -37,6 +44,5 @@ export async function createProject(
 		projectName: projectOptions.projectName ?? projectDirectory,
 		gitInitialized,
 		dependenciesInstalled,
-		template: projectOptions.template ?? "default",
 	};
 }

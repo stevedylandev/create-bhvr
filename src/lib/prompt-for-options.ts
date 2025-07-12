@@ -50,7 +50,7 @@ export async function promptForOptions(
 		useRpc = rpcResponse;
 	}
 
-	if (!useRpc) {
+	if (useRpc === undefined) {
 		consola.error("Project creation cancelled.");
 		process.exit(1);
 	}
@@ -83,6 +83,29 @@ export async function promptForOptions(
 		process.exit(1);
 	}
 
+	let style = options.style;
+
+	if (!options.yes && !options.style) {
+		const { data: styleResponse, error } = await tryCatch(
+			consola.prompt("Select a styling solution:", {
+				type: "select",
+				options: [
+					{ label: "CSS (default)", value: "default" },
+					{ label: "TailwindCSS", value: "tailwindcss" },
+				],
+				initial: "default",
+				cancel: "reject",
+			}),
+		);
+
+		if (error) {
+			console.log(pc.yellow("Project creation cancelled."));
+			process.exit(1);
+		}
+
+		style = styleResponse as "tailwindcss";
+	}
+
 	return {
 		repo: options.repo || DEFAULT_REPO,
 		branch: options.branch || "main",
@@ -91,5 +114,6 @@ export async function promptForOptions(
 		projectName,
 		rpc: useRpc,
 		linter,
+		style,
 	};
 }
