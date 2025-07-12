@@ -1,3 +1,4 @@
+import { shadcnUiExtension } from "@/extensions/shadcn-ui";
 import { tailwindcssExtension } from "@/extensions/tailwindcss";
 import type { ProjectOptions, ProjectResult } from "@/types";
 import { initializeGit } from "./initialize-git";
@@ -28,6 +29,10 @@ export async function createProject(
 		await tailwindcssExtension.add(
 			projectOptions.projectName ?? projectDirectory,
 		);
+	}
+
+	if (projectOptions.extras?.includes("shadcn-ui")) {
+		await shadcnUiExtension.add(projectOptions.projectName ?? projectDirectory);
 	}
 
 	const gitInitialized = await initializeGit(

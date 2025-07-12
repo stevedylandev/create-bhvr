@@ -106,6 +106,27 @@ export async function promptForOptions(
 		style = styleResponse as "tailwindcss";
 	}
 
+	let extras = options.extras;
+
+	if (!options.yes && !options.extras) {
+		const { data: extrasResponse, error } = await tryCatch(
+			consola.prompt("Select additional features to include:", {
+				type: "multiselect",
+				options: [
+					{ label: "shadcn/ui", value: "shadcn-ui" },
+				],
+				cancel: "reject",
+			}),
+		);
+
+		if (error) {
+			console.log(pc.yellow("Project creation cancelled."));
+			process.exit(1);
+		}
+
+		extras = extrasResponse as ("shadcn-ui")[];
+	}
+
 	return {
 		repo: options.repo || DEFAULT_REPO,
 		branch: options.branch || "main",
@@ -115,5 +136,6 @@ export async function promptForOptions(
 		rpc: useRpc,
 		linter,
 		style,
+		extras,
 	};
 }

@@ -11,4 +11,5 @@ export const biomeExtension: Extension = {
 	add: addBiome,
 	remove: removeBiome,
 	conflicts: ["eslint"],
+	tag: "linter",
 };

@@ -26,6 +26,9 @@ export const create = async (
 				),
 			);
 			console.log(pc.cyan("  bun run dev          # Start all"));
+			if (options.extras?.includes("shadcn-ui")) {
+				console.log(pc.cyan("  bunx shadcn-ui add button"));
+			}
 			process.exit(0);
 		}
 	} catch (err) {

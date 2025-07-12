@@ -5,7 +5,7 @@ import fs from "fs-extra";
 import pc from "picocolors";
 import yoctoSpinner from "yocto-spinner";
 
-export async function setupTailwindcss(projectPath: string): Promise<void> {
+export async function addTailwindcss(projectPath: string): Promise<void> {
 	const spinner = yoctoSpinner({
 		text: "Setting up TailwindCSS v4...",
 	}).start();
