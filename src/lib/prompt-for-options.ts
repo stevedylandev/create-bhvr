@@ -5,99 +5,99 @@ import { TEMPLATES } from "@/utils/templates";
 import { tryCatch } from "@/utils/try-catch";
 
 export async function promptForOptions(
-  options: ProjectOptions,
+	options: ProjectOptions,
 ): Promise<ProjectOptions> {
-  let projectName = options.projectName;
+	let projectName = options.projectName;
 
-  if (!projectName && !options.yes) {
-    const { data, error } = await tryCatch(
-      consola.prompt(pc.yellow("What is the name of your project?"), {
-        type: "text",
-        default: "my-bhvr-app",
-        placeholder: "my-bhvr-app",
-        cancel: "reject",
-      }),
-    );
+	if (!projectName && !options.yes) {
+		const { data, error } = await tryCatch(
+			consola.prompt(pc.yellow("What is the name of your project?"), {
+				type: "text",
+				default: "my-bhvr-app",
+				placeholder: "my-bhvr-app",
+				cancel: "reject",
+			}),
+		);
 
-    if (!data || error) {
-      consola.error(pc.red("Project creation cancelled."));
-      process.exit(1);
-    }
+		if (!data || error) {
+			consola.error(pc.red("Project creation cancelled."));
+			process.exit(1);
+		}
 
-    projectName = data;
-  }
+		projectName = data;
+	}
 
-  let templateChoice = options.template || "default";
+	let templateChoice = options.template || "default";
 
-  if (!options.yes && !options.branch) {
-    const templateChoices = Object.keys(TEMPLATES).map((key) => ({
-      label: `${key} (${TEMPLATES[key]?.description})`,
-      value: key,
-    }));
+	if (!options.yes && !options.branch) {
+		const templateChoices = Object.keys(TEMPLATES).map((key) => ({
+			label: `${key} (${TEMPLATES[key]?.description})`,
+			value: key,
+		}));
 
-    const { data, error } = await tryCatch(
-      consola.prompt(pc.yellow("Select a template:"), {
-        type: "select",
-        options: templateChoices,
-        initial: "default",
-        cancel: "reject",
-      }),
-    );
+		const { data, error } = await tryCatch(
+			consola.prompt(pc.yellow("Select a template:"), {
+				type: "select",
+				options: templateChoices,
+				initial: "default",
+				cancel: "reject",
+			}),
+		);
 
-    if (!data || error) {
-      consola.error("Project creation cancelled.");
-      process.exit(1);
-    }
+		if (!data || error) {
+			consola.error("Project creation cancelled.");
+			process.exit(1);
+		}
 
-    templateChoice = data;
-  }
+		templateChoice = data;
+	}
 
-  let useRpc = options.rpc;
+	let useRpc = options.rpc;
 
-  if (!options.yes && !options.rpc) {
-    const { data: rpcResponse, error } = await tryCatch(
-      consola.prompt("Use Hono RPC client for type-safe API communication?", {
-        type: "confirm",
-        initial: false,
-      }),
-    );
+	if (!options.yes && !options.rpc) {
+		const { data: rpcResponse, error } = await tryCatch(
+			consola.prompt("Use Hono RPC client for type-safe API communication?", {
+				type: "confirm",
+				initial: false,
+			}),
+		);
 
-    if (error) {
-      consola.error("Project creation cancelled.");
-      process.exit(1);
-    }
+		if (error) {
+			consola.error("Project creation cancelled.");
+			process.exit(1);
+		}
 
-    useRpc = rpcResponse;
-  }
+		useRpc = rpcResponse;
+	}
 
-  let linter = options.linter;
+	let linter = options.linter;
 
-  if (!options.yes && !options.linter) {
-    const { data: linterResponse, error } = await tryCatch(
-      consola.prompt("Select a linter:", {
-        type: "select",
-        options: [
-          { label: "ESLint (default)", value: "eslint" },
-          { label: "Biome", value: "biome" },
-        ],
-        initial: "eslint",
-        cancel: "reject",
-      }),
-    );
+	if (!options.yes && !options.linter) {
+		const { data: linterResponse, error } = await tryCatch(
+			consola.prompt("Select a linter:", {
+				type: "select",
+				options: [
+					{ label: "ESLint (default)", value: "eslint" },
+					{ label: "Biome", value: "biome" },
+				],
+				initial: "eslint",
+				cancel: "reject",
+			}),
+		);
 
-    if (error) {
-      console.log(pc.yellow("Project creation cancelled."));
-      process.exit(1);
-    }
+		if (error) {
+			console.log(pc.yellow("Project creation cancelled."));
+			process.exit(1);
+		}
 
-    linter = linterResponse as "eslint" | "biome";
-  }
+		linter = linterResponse as "eslint" | "biome";
+	}
 
-  return {
-    ...options,
-    projectName,
-    template: templateChoice,
-    rpc: useRpc,
-    linter,
-  };
+	return {
+		...options,
+		projectName,
+		template: templateChoice,
+		rpc: useRpc,
+		linter,
+	};
 }
