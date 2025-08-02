@@ -18,7 +18,9 @@
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
 		"lint": "biome lint --write src package.json",
-		"format": "biome format --write src package.json"
+		"lint:check": "biome lint src package.json",
+		"format": "biome format --write src package.json",
+		"format:check": "biome format src package.json"
 	},
 	"keywords": [
 		"bun",
