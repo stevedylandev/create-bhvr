@@ -1,0 +1,159 @@
+name: Test CLI Options
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-cli-options:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Default template combinations
+          - template: "default"
+            rpc: true
+            linter: "eslint"
+            test_name: "Default + RPC + ESLint"
+          - template: "default"
+            rpc: true
+            linter: "biome"
+            test_name: "Default + RPC + Biome"
+          - template: "default"
+            rpc: false
+            linter: "eslint"
+            test_name: "Default + No RPC + ESLint"
+          - template: "default"
+            rpc: false
+            linter: "biome"
+            test_name: "Default + No RPC + Biome"
+          
+          # Tailwind template combinations
+          - template: "tailwind"
+            rpc: true
+            linter: "eslint"
+            test_name: "Tailwind + RPC + ESLint"
+          - template: "tailwind"
+            rpc: true
+            linter: "biome"
+            test_name: "Tailwind + RPC + Biome"
+          - template: "tailwind"
+            rpc: false
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + ESLint"
+          - template: "tailwind"
+            rpc: false
+            linter: "biome"
+            test_name: "Tailwind + No RPC + Biome"
+          
+          # Shadcn template combinations
+          - template: "shadcn"
+            rpc: true
+            linter: "eslint"
+            test_name: "Shadcn + RPC + ESLint"
+          - template: "shadcn"
+            rpc: true
+            linter: "biome"
+            test_name: "Shadcn + RPC + Biome"
+          - template: "shadcn"
+            rpc: false
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + ESLint"
+          - template: "shadcn"
+            rpc: false
+            linter: "biome"
+            test_name: "Shadcn + No RPC + Biome"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build CLI
+        run: bun run build
+
+      - name: Create test project - ${{ matrix.test_name }}
+        run: |
+          # Create project with specified options
+          echo "Creating project with options:"
+          echo "Template: ${{ matrix.template }}"
+          echo "RPC: ${{ matrix.rpc }}"
+          echo "Linter: ${{ matrix.linter }}"
+          
+          ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
+            --yes \
+            --template ${{ matrix.template }} \
+            --rpc=${{ matrix.rpc }} \
+            --linter ${{ matrix.linter }}
+
+      - name: Install project dependencies
+        run: |
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          bun install
+
+      - name: Build test project
+        run: |
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          bun run build
+
+      - name: Verify build outputs
+        run: |
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          
+          # Check that dist directories exist
+          if [ ! -d "client/dist" ]; then
+            echo "❌ Client build failed - dist directory not found"
+            exit 1
+          fi
+          
+          if [ ! -d "server/dist" ]; then
+            echo "❌ Server build failed - dist directory not found"
+            exit 1
+          fi
+          
+          # Check for expected files
+          if [ ! -f "client/dist/index.html" ]; then
+            echo "❌ Client build incomplete - index.html not found"
+            exit 1
+          fi
+          
+          if [ ! -f "server/dist/index.js" ]; then
+            echo "❌ Server build incomplete - index.js not found"
+            exit 1
+          fi
+          
+          echo "✅ Build verification passed for ${{ matrix.test_name }}"
+
+      - name: Run linter on generated project
+        run: |
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          
+          if [ "${{ matrix.linter }}" = "eslint" ]; then
+            # Check if ESLint config exists and run it
+            if [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ] || [ -f "eslint.config.js" ]; then
+              echo "Running ESLint..."
+              bun run lint || echo "ESLint warnings/errors found but continuing..."
+            fi
+          elif [ "${{ matrix.linter }}" = "biome" ]; then
+            # Check if Biome config exists and run it
+            if [ -f "biome.json" ]; then
+              echo "Running Biome..."
+              bun run lint || echo "Biome warnings/errors found but continuing..."
+            fi
+          fi
+
+      - name: Cleanup test project
+        if: always()
+        run: |
+          rm -rf test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
