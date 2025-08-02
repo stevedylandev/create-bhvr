@@ -13,6 +13,7 @@ dist
 build
 
 # misc
+.zed
 .DS_Store
 .env
 .env.local
