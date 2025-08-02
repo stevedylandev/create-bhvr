@@ -91,11 +91,18 @@ jobs:
           echo "RPC: ${{ matrix.rpc }}"
           echo "Linter: ${{ matrix.linter }}"
           
-          ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
-            --yes \
-            --template ${{ matrix.template }} \
-            --rpc=${{ matrix.rpc }} \
-            --linter ${{ matrix.linter }}
+          if [ "${{ matrix.rpc }}" = "true" ]; then
+            ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
+              --yes \
+              --template ${{ matrix.template }} \
+              --rpc \
+              --linter ${{ matrix.linter }}
+          else
+            ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
+              --yes \
+              --template ${{ matrix.template }} \
+              --linter ${{ matrix.linter }}
+          fi
 
       - name: Install project dependencies
         run: |
