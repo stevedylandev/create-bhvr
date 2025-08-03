@@ -1,15 +1,15 @@
 import { consola } from "consola";
-import figlet from "figlet";
 import pc from "picocolors";
 
 export function displayBanner() {
-	const text = figlet.textSync("bhvr", {
-		font: "Big",
-		horizontalLayout: "default",
-		verticalLayout: "default",
-		width: 80,
-		whitespaceBreak: true,
-	});
+	const text = `
+  _     _
+ | |   | |
+ | |__ | |____   ___ __
+ | '_ \\| '_ \\ \\ / / '__|
+ | |_) | | | \\ V /| |
+ |_.__/|_| |_|\\_/ |_|
+`;
 
 	console.log("\n");
 	console.log(pc.yellowBright(text));
