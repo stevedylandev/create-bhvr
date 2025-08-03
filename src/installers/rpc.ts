@@ -11,14 +11,18 @@ import {
 	shadcnTemplate,
 	tailwindTemplate,
 } from "@/utils/templates";
+import { ProjectOptions } from "@/types";
+import { EXTRAS_DIR } from "@/utils";
 
-export async function patchFilesForRPC(
-	projectPath: string,
-	templateChoice: string,
+export async function rpcInstaller(
+	options: Required<ProjectOptions>,
 ): Promise<boolean> {
 	const spinner = yoctoSpinner({ text: "Setting up RPC client..." }).start();
 
 	try {
+		const { projectName, rpc, shadcn, tailwind } = options;
+		const projectPath = path.resolve(process.cwd(), projectName);
+
 		// 1. Update client package.json to ensure hono client is installed
 		const clientPkgPath = path.join(projectPath, "client", "package.json");
 		const clientPkg = await fs.readJson(clientPkgPath);
@@ -52,25 +56,18 @@ export async function patchFilesForRPC(
 		await fs.writeFile(clientHelperPath, honoClientTemplate, "utf8");
 
 		// 5. Update App.tsx based on template selection using switch statement
-		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
+		const selectedTemplate = `App-with${tailwind ? "-tailwind" : ""}${shadcn ? "-shadcn" : ""}${rpc ? "-rpc" : ""}.tsx`;
 
-		// Determine template content based on the template type
-		let updatedAppContent: string;
+		const appTsxSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"src",
+			"App.tsx",
+			selectedTemplate,
+		);
+		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
 
-		// Select template based on choice
-		switch (templateChoice) {
-			case "shadcn":
-				updatedAppContent = shadcnTemplate;
-				break;
-			case "tailwind":
-				updatedAppContent = tailwindTemplate;
-				break;
-			default:
-				updatedAppContent = defaultTemplate;
-				break;
-		}
-
-		await fs.writeFile(appTsxPath, updatedAppContent, "utf8");
+		fs.copySync(appTsxSrc, appTsxTarget);
 		spinner.success("RPC client setup completed");
 		return true;
 	} catch (err: unknown) {

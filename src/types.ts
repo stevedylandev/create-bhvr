@@ -10,8 +10,11 @@ export type ProjectOptions = {
 	repo?: string;
 	template?: string;
 	branch?: string;
+	tailwind?: boolean;
+	shadcn?: boolean;
 	rpc?: boolean;
 	linter?: "eslint" | "biome";
+	tanstackQuery?: boolean;
 };
 
 export interface ProjectResult {

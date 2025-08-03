@@ -55,14 +55,6 @@ export async function scaffoldTemplate(
 			console.log(pc.blue("Removed .git directory"));
 		}
 
-		if (rpc) {
-			await patchFilesForRPC(projectPath, template);
-		}
-
-		if (linter === "biome") {
-			await setupBiome(projectPath);
-		}
-
 		return true;
 	} catch (err) {
 		spinner.error("Failed to download template");

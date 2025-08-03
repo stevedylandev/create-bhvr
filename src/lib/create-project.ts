@@ -3,6 +3,7 @@ import { initializeGit } from "./initialize-git";
 import { installDependencies } from "./install-dependencies";
 import { promptForOptions } from "./prompt-for-options";
 import { scaffoldTemplate } from "./scaffold-template";
+import { installPackages } from "./install-packages";
 
 export async function createProject(
 	projectDirectory: string,
@@ -22,6 +23,8 @@ export async function createProject(
 	if (!scaffolded) {
 		return null;
 	}
+
+	const packagesInstalled = await installPackages(projectOptions);
 
 	const gitInitialized = await initializeGit(
 		projectOptions.projectName ?? projectDirectory,
