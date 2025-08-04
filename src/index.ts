@@ -24,6 +24,10 @@ program
 	)
 	.option("--branch <branch>", "specify a branch to use from the repository")
 	.option("--rpc", "use Hono RPC client for type-safe API communication")
+	.option(
+		"--tsquery",
+		"use TanStack Query for data fetching and state management",
+	)
 	.option("--linter <linter>", "specify the linter to use (eslint or biome)")
 	.action(create);
 
