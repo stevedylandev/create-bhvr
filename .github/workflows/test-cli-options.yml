@@ -17,56 +17,128 @@ jobs:
           # Default template combinations
           - template: "default"
             rpc: true
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Default + RPC + ESLint"
+            test_name: "Default + RPC + No TanStack Query + ESLint"
           - template: "default"
             rpc: true
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Default + RPC + Biome"
+            test_name: "Default + RPC + No TanStack Query + Biome"
           - template: "default"
             rpc: false
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Default + No RPC + ESLint"
+            test_name: "Default + No RPC + No TanStack Query + ESLint"
           - template: "default"
             rpc: false
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Default + No RPC + Biome"
+            test_name: "Default + No RPC + No TanStack Query + Biome"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Default + RPC + TanStack Query + ESLint"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Default + RPC + TanStack Query + Biome"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Default + No RPC + TanStack Query + ESLint"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Default + No RPC + TanStack Query + Biome"
           
           # Tailwind template combinations
           - template: "tailwind"
             rpc: true
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Tailwind + RPC + ESLint"
+            test_name: "Tailwind + RPC + No TanStack Query + ESLint"
           - template: "tailwind"
             rpc: true
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Tailwind + RPC + Biome"
+            test_name: "Tailwind + RPC + No TanStack Query + Biome"
           - template: "tailwind"
             rpc: false
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Tailwind + No RPC + ESLint"
+            test_name: "Tailwind + No RPC + No TanStack Query + ESLint"
           - template: "tailwind"
             rpc: false
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Tailwind + No RPC + Biome"
-          
+            test_name: "Tailwind + No RPC + No TanStack Query + Biome"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Tailwind + RPC + TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Tailwind + RPC + TanStack Query + Biome"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Tailwind + No RPC + TanStack Query + Biome"
+
           # Shadcn template combinations
           - template: "shadcn"
             rpc: true
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Shadcn + RPC + ESLint"
+            test_name: "Shadcn + RPC + No TanStack Query + ESLint"
           - template: "shadcn"
             rpc: true
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Shadcn + RPC + Biome"
+            test_name: "Shadcn + RPC + No TanStack Query + Biome"
           - template: "shadcn"
             rpc: false
+            tanstackQuery: false
             linter: "eslint"
-            test_name: "Shadcn + No RPC + ESLint"
+            test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
           - template: "shadcn"
             rpc: false
+            tanstackQuery: false
             linter: "biome"
-            test_name: "Shadcn + No RPC + Biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + Biome"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Shadcn + RPC + TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Shadcn + RPC + TanStack Query + Biome"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            linter: "biome"
+            test_name: "Shadcn + No RPC + TanStack Query + Biome"
 
     steps:
       - name: Checkout repository
