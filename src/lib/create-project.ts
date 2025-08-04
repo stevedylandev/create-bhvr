@@ -24,7 +24,7 @@ export async function createProject(
 		return null;
 	}
 
-	const packagesInstalled = await installPackages(projectOptions);
+	await installPackages(projectOptions);
 
 	const gitInitialized = await initializeGit(
 		projectOptions.projectName ?? projectDirectory,

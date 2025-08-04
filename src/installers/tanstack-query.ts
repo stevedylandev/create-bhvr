@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import fs from "fs-extra";
 import type { ProjectOptions } from "@/types";
 import yoctoSpinner from "yocto-spinner";

@@ -7,8 +7,7 @@ import { rpcInstaller } from "@/installers/rpc";
 export async function installPackages(
 	options: Required<ProjectOptions>,
 ): Promise<boolean> {
-	const { projectName, template, repo, branch, rpc, linter, tanstackQuery } =
-		options;
+	const { projectName, rpc, linter, tanstackQuery } = options;
 
 	const projectPath = path.resolve(process.cwd(), projectName);
 

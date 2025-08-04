@@ -4,14 +4,8 @@ import { execa } from "execa";
 import fs from "fs-extra";
 import pc from "picocolors";
 import yoctoSpinner from "yocto-spinner";
-import {
-	defaultTemplate,
-	honoClientTemplate,
-	honoRpcTemplate,
-	shadcnTemplate,
-	tailwindTemplate,
-} from "@/utils/templates";
-import { ProjectOptions } from "@/types";
+import { honoClientTemplate, honoRpcTemplate } from "@/utils/templates";
+import type { ProjectOptions } from "@/types";
 import { EXTRAS_DIR } from "@/utils";
 
 export async function rpcInstaller(

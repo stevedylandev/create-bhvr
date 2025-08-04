@@ -6,7 +6,14 @@ import App from "./App.tsx";
 
 const queryClient = new QueryClient();
 
-createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+	throw new Error(
+		"Root element not found. Check if it's in your index.html or if the id is correct.",
+	);
+}
+createRoot(rootElement).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<App />
