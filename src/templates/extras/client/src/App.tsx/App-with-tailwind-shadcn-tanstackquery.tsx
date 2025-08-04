@@ -34,7 +34,7 @@ function App() {
 			<h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
 			<p>A typesafe fullstack monorepo</p>
 			<div className="flex items-center gap-4">
-				<Button onClick={sendRequest}>Call API</Button>
+				<Button onClick={() => sendRequest()}>Call API</Button>
 				<Button variant="secondary" asChild>
 					<a target="_blank" href="https://bhvr.dev">
 						Docs

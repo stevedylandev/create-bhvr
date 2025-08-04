@@ -44,7 +44,7 @@ function App() {
 			<p>A typesafe fullstack monorepo</p>
 			<div className="flex items-center gap-4">
 				<button
-					onClick={sendRequest}
+					onClick={() => sendRequest()}
 					className="bg-black text-white px-2.5 py-1.5 rounded-md"
 				>
 					Call API

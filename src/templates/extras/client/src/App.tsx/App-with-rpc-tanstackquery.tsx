@@ -43,7 +43,7 @@ function App() {
 			<p>A typesafe fullstack monorepo</p>
 			<div className="card">
 				<div className="button-container">
-					<button onClick={sendRequest}>Call API</button>
+					<button onClick={() => sendRequest()}>Call API</button>
 					<a className="docs-link" target="_blank" href="https://bhvr.dev">
 						Docs
 					</a>
