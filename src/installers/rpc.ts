@@ -7,6 +7,7 @@ import yoctoSpinner from "yocto-spinner";
 import { honoClientTemplate, honoRpcTemplate } from "@/utils/templates";
 import type { ProjectOptions } from "@/types";
 import { EXTRAS_DIR } from "@/utils";
+import { nameGenerator } from "@/utils/name-generator";
 
 export async function rpcInstaller(
 	options: Required<ProjectOptions>,
@@ -50,14 +51,12 @@ export async function rpcInstaller(
 		await fs.writeFile(clientHelperPath, honoClientTemplate, "utf8");
 
 		// 5. Update App.tsx based on template selection using switch statement
-		const selectedTemplate = `App-with${tailwind ? "-tailwind" : ""}${shadcn ? "-shadcn" : ""}${rpc ? "-rpc" : ""}.tsx`;
-
 		const appTsxSrc = path.join(
 			EXTRAS_DIR,
 			"client",
 			"src",
 			"App.tsx",
-			selectedTemplate,
+			nameGenerator("App.tsx", { tailwind, shadcn, rpc }),
 		);
 		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
 

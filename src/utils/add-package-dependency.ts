@@ -1,43 +1,46 @@
 import path from "node:path";
 import { execa } from "execa";
 
-export const addPackageDependency = async (opts: {
+export interface AddPackageDependencyOptions {
 	dependencies: string[];
 	devMode?: boolean;
 	projectName: string;
 	target?: "client" | "server";
-}) => {
-	const { dependencies, devMode, projectName, target } = opts;
+}
 
-	const projectPath = path.resolve(process.cwd(), projectName);
+export const addPackageDependency = async (
+	opts: AddPackageDependencyOptions,
+) => {
+	const { dependencies, devMode = false, projectName, target } = opts;
 
-	if (target !== undefined) {
-		if (target === "client") {
-			const clientPath = path.join(projectPath, "client");
-			await execa("bun", [`install${devMode ? " -D" : ""}`, ...dependencies], {
-				cwd: clientPath,
-			});
-			return;
-		}
-
-		if (target === "server") {
-			const serverPath = path.join(projectPath, "server");
-			await execa(
-				"bun",
-				[
-					`install${devMode ? " -D" : ""}`,
-					devMode ? "-D" : "",
-					...dependencies,
-				],
-				{
-					cwd: serverPath,
-				},
-			);
-			return;
-		}
+	// Early validation - only validate project name, allow empty dependencies
+	if (!projectName.trim()) {
+		throw new Error("Project name is required");
 	}
 
-	await execa("bun", ["install", ...dependencies], {
-		cwd: projectPath,
-	});
+	// Construct base command args once
+	const baseArgs = ["install"];
+	if (devMode) {
+		baseArgs.push("-D");
+	}
+	const installArgs = [...baseArgs, ...dependencies];
+
+	// Determine working directory
+	const projectPath = path.resolve(process.cwd(), projectName);
+	let workingDir = projectPath;
+
+	if (target) {
+		workingDir = path.join(projectPath, target);
+	}
+
+	try {
+		await execa("bun", installArgs, {
+			cwd: workingDir,
+		});
+	} catch (error) {
+		const targetSuffix = target ? ` in ${target}` : "";
+		throw new Error(
+			`Failed to install dependencies${targetSuffix}: ${error instanceof Error ? error.message : String(error)}`,
+		);
+	}
 };

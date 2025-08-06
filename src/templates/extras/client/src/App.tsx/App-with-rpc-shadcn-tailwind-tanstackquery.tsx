@@ -1,20 +1,30 @@
 import { useState } from "react";
 import beaver from "./assets/beaver.svg";
-import type { ApiResponse } from "shared";
 import { Button } from "./components/ui/button";
+import { hcWithType } from "server/dist/client";
 import { useMutation } from "@tanstack/react-query";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
+const client = hcWithType(SERVER_URL);
+
+type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
+
 function App() {
-	const [data, setData] = useState<ApiResponse | undefined>();
+	const [data, setData] = useState<
+		Awaited<ReturnType<ResponseType["json"]>> | undefined
+	>();
 
 	const { mutate: sendRequest } = useMutation({
 		mutationFn: async () => {
 			try {
-				const req = await fetch(`${SERVER_URL}/hello`);
-				const res: ApiResponse = await req.json();
-				setData(res);
+				const res = await client.hello.$get();
+				if (!res.ok) {
+					console.log("Error fetching data");
+					return;
+				}
+				const data = await res.json();
+				setData(data);
 			} catch (error) {
 				console.log(error);
 			}
@@ -23,7 +33,11 @@ function App() {
 
 	return (
 		<div className="max-w-xl mx-auto flex flex-col gap-6 items-center justify-center min-h-screen">
-			<a href="https://github.com/stevedylandev/bhvr" target="_blank" rel="noopener">
+			<a
+				href="https://github.com/stevedylandev/bhvr"
+				target="_blank"
+				rel="noopener"
+			>
 				<img
 					src={beaver}
 					className="w-16 h-16 cursor-pointer"

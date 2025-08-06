@@ -6,6 +6,7 @@ import pc from "picocolors";
 import { consola } from "consola";
 import { addPackageDependency } from "@/utils/add-package-dependency";
 import { EXTRAS_DIR } from "@/utils";
+import { nameGenerator } from "@/utils/name-generator";
 
 export const tanstackQueryInstaller = async (
 	options: Required<ProjectOptions>,
@@ -25,7 +26,12 @@ export const tanstackQueryInstaller = async (
 			projectName,
 		});
 
-		const selectedTemplate = `App-with${tailwind ? "-tailwind" : ""}${shadcn ? "-shadcn" : ""}${rpc ? "-rpc" : ""}${tanstackQuery ? "-tanstackquery" : ""}.tsx`;
+		const selectedTemplate = nameGenerator("App.tsx", {
+			rpc,
+			shadcn,
+			tailwind,
+			tanstackQuery,
+		});
 
 		const appTsxSrc = path.join(
 			EXTRAS_DIR,
@@ -42,7 +48,7 @@ export const tanstackQueryInstaller = async (
 			"client",
 			"src",
 			"main.tsx",
-			"main-with-tanstackquery.tsx",
+			nameGenerator("main.tsx", { tanstackQuery }),
 		);
 		const mainTsxTarget = path.join(projectPath, "client", "src", "main.tsx");
 		fs.copySync(mainTsxSrc, mainTsxTarget);
