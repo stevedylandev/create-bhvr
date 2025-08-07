@@ -21,10 +21,80 @@ export const tanstackRouterInstaller = async (
 		const projectPath = path.resolve(process.cwd(), projectName);
 		spinner.text = "Installing TanStack Router...";
 		await addPackageDependency({
-			dependencies: [""],
+			dependencies: [
+				"@tanstack/react-router",
+				"@tanstack/react-router-devtools",
+			],
 			target: "client",
 			projectName,
 		});
+
+		await addPackageDependency({
+			dependencies: ["@tanstack/router-plugin"],
+			devMode: true,
+			target: "client",
+			projectName,
+		});
+
+		const viteConfigTemplate = nameGenerator("vite.config.ts", {
+			tailwind,
+			shadcn,
+			tanstackRouter: true,
+		});
+		const viteConfigSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"vite.config.ts",
+			viteConfigTemplate,
+		);
+		const viteConfigTarget = path.join(projectPath, "client", "vite.config.ts");
+		fs.copySync(viteConfigSrc, viteConfigTarget);
+
+		const rootTsxSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"src",
+			"routes",
+			"__root.tsx",
+		);
+		const rootTsxTarget = path.join(
+			projectPath,
+			"client",
+			"src",
+			"routes",
+			"__root.tsx",
+		);
+		fs.copySync(rootTsxSrc, rootTsxTarget);
+
+		const indexTsxSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"src",
+			"routes",
+			"index.tsx",
+			nameGenerator("index.tsx", { tanstackQuery, tailwind, shadcn, rpc }),
+		);
+		const indexTsxTarget = path.join(
+			projectPath,
+			"client",
+			"src",
+			"routes",
+			"index.tsx",
+		);
+		fs.copySync(indexTsxSrc, indexTsxTarget);
+
+		const mainTsxSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"src",
+			"main.tsx",
+			nameGenerator("main.tsx", { tanstackQuery, tanstackRouter: true }),
+		);
+		const mainTsxTarget = path.join(projectPath, "client", "src", "main.tsx");
+		fs.copySync(mainTsxSrc, mainTsxTarget);
+
+		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
+		fs.remove(appTsxTarget);
 
 		// const selectedTemplate = nameGenerator("App.tsx", {
 		// 	rpc,
