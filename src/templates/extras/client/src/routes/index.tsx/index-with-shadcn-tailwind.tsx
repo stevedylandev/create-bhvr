@@ -25,7 +25,11 @@ function Index() {
 
 	return (
 		<div className="max-w-xl mx-auto flex flex-col gap-6 items-center justify-center min-h-screen">
-			<a href="https://github.com/stevedylandev/bhvr" target="_blank">
+			<a
+				href="https://github.com/stevedylandev/bhvr"
+				target="_blank"
+				rel="noopener"
+			>
 				<img
 					src={beaver}
 					className="w-16 h-16 cursor-pointer"
@@ -38,7 +42,7 @@ function Index() {
 			<div className="flex items-center gap-4">
 				<Button onClick={sendRequest}>Call API</Button>
 				<Button variant="secondary" asChild>
-					<a target="_blank" href="https://bhvr.dev">
+					<a target="_blank" href="https://bhvr.dev" rel="noopener">
 						Docs
 					</a>
 				</Button>

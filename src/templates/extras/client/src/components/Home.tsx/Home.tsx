@@ -21,7 +21,11 @@ function Home() {
 	return (
 		<>
 			<div>
-				<a href="https://github.com/stevedylandev/bhvr" target="_blank">
+				<a
+					href="https://github.com/stevedylandev/bhvr"
+					target="_blank"
+					rel="noopener"
+				>
 					<img src={beaver} className="logo" alt="beaver logo" />
 				</a>
 			</div>
@@ -30,8 +34,15 @@ function Home() {
 			<p>A typesafe fullstack monorepo</p>
 			<div className="card">
 				<div className="button-container">
-					<button onClick={sendRequest}>Call API</button>
-					<a className="docs-link" target="_blank" href="https://bhvr.dev">
+					<button type="button" onClick={sendRequest}>
+						Call API
+					</button>
+					<a
+						className="docs-link"
+						target="_blank"
+						href="https://bhvr.dev"
+						rel="noopener"
+					>
 						Docs
 					</a>
 				</div>
