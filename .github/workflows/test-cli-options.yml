@@ -2,14 +2,14 @@ name: Test CLI Options
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test-cli-options:
     runs-on: ubuntu-latest
-    
+
     strategy:
       fail-fast: false
       matrix:
@@ -63,7 +63,7 @@ jobs:
             router: "none"
             linter: "biome"
             test_name: "Default + No RPC + TanStack Query + Biome"
-          
+
           # Tailwind template combinations
           - template: "tailwind"
             rpc: true
@@ -131,7 +131,6 @@ jobs:
             rpc: false
             tanstackQuery: false
             router: "none"
-            router: "none"
             linter: "eslint"
             test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
           - template: "shadcn"
@@ -161,7 +160,158 @@ jobs:
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
-            router: "none"
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Shadcn + No RPC + TanStack Query + Biome"
+
+          # React Router
+          # Default template combinations
+          - template: "default"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Default + RPC + No TanStack Query + ESLint"
+          - template: "default"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Default + RPC + No TanStack Query + Biome"
+          - template: "default"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Default + No RPC + No TanStack Query + ESLint"
+          - template: "default"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Default + No RPC + No TanStack Query + Biome"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Default + RPC + TanStack Query + ESLint"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Default + RPC + TanStack Query + Biome"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Default + No RPC + TanStack Query + ESLint"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Default + No RPC + TanStack Query + Biome"
+
+          # Tailwind template combinations
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Tailwind + RPC + No TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Tailwind + RPC + No TanStack Query + Biome"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + No TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Tailwind + No RPC + No TanStack Query + Biome"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Tailwind + RPC + TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Tailwind + RPC + TanStack Query + Biome"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + TanStack Query + ESLint"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Tailwind + No RPC + TanStack Query + Biome"
+
+          # Shadcn template combinations
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Shadcn + RPC + No TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Shadcn + RPC + No TanStack Query + Biome"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: false
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + Biome"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Shadcn + RPC + TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "biome"
+            test_name: "Shadcn + RPC + TanStack Query + Biome"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + TanStack Query + ESLint"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            router: "reactrouter"
             linter: "biome"
             test_name: "Shadcn + No RPC + TanStack Query + Biome"
 
@@ -187,7 +337,7 @@ jobs:
           echo "Template: ${{ matrix.template }}"
           echo "RPC: ${{ matrix.rpc }}"
           echo "Linter: ${{ matrix.linter }}"
-          
+
           if [ "${{ matrix.rpc }}" = "true" ]; then
             ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
               --yes \
@@ -214,35 +364,35 @@ jobs:
       - name: Verify build outputs
         run: |
           cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
-          
+
           # Check that dist directories exist
           if [ ! -d "client/dist" ]; then
             echo "❌ Client build failed - dist directory not found"
             exit 1
           fi
-          
+
           if [ ! -d "server/dist" ]; then
             echo "❌ Server build failed - dist directory not found"
             exit 1
           fi
-          
+
           # Check for expected files
           if [ ! -f "client/dist/index.html" ]; then
             echo "❌ Client build incomplete - index.html not found"
             exit 1
           fi
-          
+
           if [ ! -f "server/dist/index.js" ]; then
             echo "❌ Server build incomplete - index.js not found"
             exit 1
           fi
-          
+
           echo "✅ Build verification passed for ${{ matrix.test_name }}"
 
       - name: Run linter on generated project
         run: |
           cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
-          
+
           if [ "${{ matrix.linter }}" = "eslint" ]; then
             # Check if ESLint config exists and run it
             if [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ] || [ -f "eslint.config.js" ]; then
