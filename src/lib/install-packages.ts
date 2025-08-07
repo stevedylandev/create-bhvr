@@ -7,7 +7,7 @@ import { rpcInstaller } from "@/installers/rpc";
 export async function installPackages(
 	options: Required<ProjectOptions>,
 ): Promise<boolean> {
-	const { projectName, rpc, linter, tanstackQuery } = options;
+	const { projectName, rpc, router, linter, tanstackQuery } = options;
 
 	const projectPath = path.resolve(process.cwd(), projectName);
 
@@ -17,6 +17,17 @@ export async function installPackages(
 
 	if (linter === "biome") {
 		await setupBiome(projectPath);
+	}
+
+	if (router !== "none") {
+		switch (router) {
+			case "reactrouter": {
+				break;
+			}
+			case: "tanstackrouter": {
+				break;
+			}
+		}
 	}
 
 	if (tanstackQuery) {

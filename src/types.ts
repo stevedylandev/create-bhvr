@@ -14,6 +14,7 @@ export type ProjectOptions = {
 	shadcn?: boolean;
 	rpc?: boolean;
 	linter?: "eslint" | "biome";
+	router?: "none" | "reactrouter" | "tanstackrouter";
 	tanstackQuery?: boolean;
 };
 

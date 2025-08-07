@@ -93,6 +93,30 @@ export async function promptForOptions(
 		linter = linterResponse as "eslint" | "biome";
 	}
 
+	let router = options.router;
+
+	if (!options.yes && !options.router) {
+		const { data: routerResponse, error } = await tryCatch(
+			consola.prompt("Select a client router:", {
+				type: "select",
+				options: [
+					{ label: "None (default)", value: "none" },
+					{ label: "React Router", value: "reactrouter" },
+					{ label: "TanStack Router", value: "tanstackrouter" },
+				],
+				initial: "none",
+				cancel: "reject",
+			}),
+		);
+
+		if (error) {
+			console.log(pc.yellow("Project creation cancelled."));
+			process.exit(1);
+		}
+
+		router = routerResponse as "none" | "reactrouter" | "tanstackrouter";
+	}
+
 	let useTanstackQuery = options.tanstackQuery;
 
 	if (!options.yes && !options.tanstackQuery) {
@@ -122,6 +146,7 @@ export async function promptForOptions(
 		shadcn: templateChoice === "shadcn",
 		rpc: useRpc,
 		linter,
+		router,
 		tanstackQuery: useTanstackQuery,
 	};
 }
