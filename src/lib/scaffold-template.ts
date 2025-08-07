@@ -6,13 +6,11 @@ import yoctoSpinner from "yocto-spinner";
 import type { ProjectOptions } from "@/types";
 import { DEFAULT_REPO } from "@/utils/constants";
 import { TEMPLATES } from "@/utils/templates";
-import { patchFilesForRPC } from "./patch-files-rpc";
-import { setupBiome } from "./setup-biome";
 
 export async function scaffoldTemplate(
 	options: Required<ProjectOptions>,
 ): Promise<boolean> {
-	const { projectName, template, repo, branch, rpc, linter } = options;
+	const { projectName, template, repo, branch } = options;
 
 	const projectPath = path.resolve(process.cwd(), projectName);
 
@@ -53,14 +51,6 @@ export async function scaffoldTemplate(
 		if (fs.existsSync(gitDir)) {
 			await fs.remove(gitDir);
 			console.log(pc.blue("Removed .git directory"));
-		}
-
-		if (rpc) {
-			await patchFilesForRPC(projectPath, template);
-		}
-
-		if (linter === "biome") {
-			await setupBiome(projectPath);
 		}
 
 		return true;

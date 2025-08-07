@@ -93,11 +93,35 @@ export async function promptForOptions(
 		linter = linterResponse as "eslint" | "biome";
 	}
 
+	let useTanstackQuery = options.tanstackQuery;
+
+	if (!options.yes && !options.tanstackQuery) {
+		const { data: tanstackQueryResponse, error } = await tryCatch(
+			consola.prompt(
+				"Would you like to enable TanStack Query for data fetching and state management?",
+				{
+					type: "confirm",
+					initial: false,
+				},
+			),
+		);
+
+		if (error) {
+			consola.error("Project creation cancelled.");
+			process.exit(1);
+		}
+
+		useTanstackQuery = tanstackQueryResponse;
+	}
+
 	return {
 		...options,
 		projectName,
 		template: templateChoice,
+		tailwind: templateChoice === "tailwind" || templateChoice === "shadcn",
+		shadcn: templateChoice === "shadcn",
 		rpc: useRpc,
 		linter,
+		tanstackQuery: useTanstackQuery,
 	};
 }
