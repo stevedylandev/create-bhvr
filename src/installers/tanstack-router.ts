@@ -8,46 +8,46 @@ import { addPackageDependency } from "@/utils/add-package-dependency";
 import { EXTRAS_DIR } from "@/utils";
 import { nameGenerator } from "@/utils/name-generator";
 
-export const reactRouterInstaller = async (
+export const tanstackRouterInstaller = async (
 	options: Required<ProjectOptions>,
 ): Promise<boolean> => {
 	const spinner = yoctoSpinner({
-		text: "Setting up React Router...",
+		text: "Setting up TanStack Router...",
 	}).start();
 
 	try {
 		const { projectName, rpc, shadcn, tailwind, tanstackQuery } = options;
 
 		const projectPath = path.resolve(process.cwd(), projectName);
-		spinner.text = "Installing React Router...";
+		spinner.text = "Installing TanStack Router...";
 		await addPackageDependency({
-			dependencies: ["react-router"],
+			dependencies: [""],
 			target: "client",
 			projectName,
 		});
 
-		const selectedTemplate = nameGenerator("App.tsx", {
-			rpc,
-			shadcn,
-			tailwind,
-			tanstackQuery,
-			reactRouter: true,
-		});
+		// const selectedTemplate = nameGenerator("App.tsx", {
+		// 	rpc,
+		// 	shadcn,
+		// 	tailwind,
+		// 	tanstackQuery,
+		// 	reactRouter: true,
+		// });
 
-		const appTsxSrc = path.join(
-			EXTRAS_DIR,
-			"client",
-			"src",
-			"App.tsx",
-			selectedTemplate,
-		);
-		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
-		fs.copySync(appTsxSrc, appTsxTarget);
-
-		spinner.success("React Router setup completed");
+		// const appTsxSrc = path.join(
+		// 	EXTRAS_DIR,
+		// 	"client",
+		// 	"src",
+		// 	"App.tsx",
+		// 	selectedTemplate,
+		// );
+		// const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
+		// fs.copySync(appTsxSrc, appTsxTarget);
+		//
+		spinner.success("TanStack Router setup completed");
 		return true;
 	} catch (err: unknown) {
-		spinner.error("Failed to set up React Router");
+		spinner.error("Failed to set up TanStack Router");
 		if (err instanceof Error) {
 			consola.error(pc.red("Error:"), err.message);
 		} else {

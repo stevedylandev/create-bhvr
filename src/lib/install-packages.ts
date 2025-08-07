@@ -22,9 +22,11 @@ export async function installPackages(
 	if (router !== "none") {
 		switch (router) {
 			case "reactrouter": {
+				console.log("Instlling React Router");
 				break;
 			}
-			case: "tanstackrouter": {
+			case "tanstackrouter": {
+				console.log("Instlling TanStack Router");
 				break;
 			}
 		}
