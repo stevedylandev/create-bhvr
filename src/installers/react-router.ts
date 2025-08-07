@@ -26,11 +26,7 @@ export const reactRouterInstaller = async (
 			projectName,
 		});
 
-		const selectedTemplate = nameGenerator("App.tsx", {
-			rpc,
-			shadcn,
-			tailwind,
-			tanstackQuery,
+		const appTsxTemplate = nameGenerator("App.tsx", {
 			reactRouter: true,
 		});
 
@@ -39,10 +35,34 @@ export const reactRouterInstaller = async (
 			"client",
 			"src",
 			"App.tsx",
-			selectedTemplate,
+			appTsxTemplate,
 		);
 		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
 		fs.copySync(appTsxSrc, appTsxTarget);
+
+		const homeTsxTemplate = nameGenerator("Home.tsx", {
+			rpc,
+			shadcn,
+			tailwind,
+			tanstackQuery,
+		});
+
+		const homeTsxSrc = path.join(
+			EXTRAS_DIR,
+			"client",
+			"src",
+			"components",
+			"Home.tsx",
+			homeTsxTemplate,
+		);
+		const homeTsxTarget = path.join(
+			projectPath,
+			"client",
+			"src",
+			"components",
+			"Home.tsx",
+		);
+		fs.copySync(homeTsxSrc, homeTsxTarget);
 
 		spinner.success("React Router setup completed");
 		return true;

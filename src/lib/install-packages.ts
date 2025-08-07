@@ -3,6 +3,7 @@ import { setupBiome } from "./setup-biome";
 import path from "node:path";
 import { tanstackQueryInstaller } from "@/installers/tanstack-query";
 import { rpcInstaller } from "@/installers/rpc";
+import { reactRouterInstaller } from "@/installers/react-router";
 
 export async function installPackages(
 	options: Required<ProjectOptions>,
@@ -22,7 +23,7 @@ export async function installPackages(
 	if (router !== "none") {
 		switch (router) {
 			case "reactrouter": {
-				console.log("Instlling React Router");
+				await reactRouterInstaller(options);
 				break;
 			}
 			case "tanstackrouter": {
