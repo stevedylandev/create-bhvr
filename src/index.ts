@@ -28,6 +28,11 @@ program
 		"--tsquery",
 		"use TanStack Query for data fetching and state management",
 	)
+	.option(
+		"--router <router>",
+		"specify a client router (none, reactrouter, tanstackrouter)",
+		"none",
+	)
 	.option("--linter <linter>", "specify the linter to use (eslint or biome)")
 	.action(create);
 

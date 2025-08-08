@@ -7,6 +7,7 @@ import { consola } from "consola";
 import { addPackageDependency } from "@/utils/add-package-dependency";
 import { EXTRAS_DIR } from "@/utils";
 import { nameGenerator } from "@/utils/name-generator";
+import { execa } from "execa";
 
 export const tanstackRouterInstaller = async (
 	options: Required<ProjectOptions>,
@@ -96,24 +97,20 @@ export const tanstackRouterInstaller = async (
 		const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
 		fs.remove(appTsxTarget);
 
-		// const selectedTemplate = nameGenerator("App.tsx", {
-		// 	rpc,
-		// 	shadcn,
-		// 	tailwind,
-		// 	tanstackQuery,
-		// 	reactRouter: true,
-		// });
+		spinner.text = "Generating TanStack Route Tree...";
 
-		// const appTsxSrc = path.join(
-		// 	EXTRAS_DIR,
-		// 	"client",
-		// 	"src",
-		// 	"App.tsx",
-		// 	selectedTemplate,
-		// );
-		// const appTsxTarget = path.join(projectPath, "client", "src", "App.tsx");
-		// fs.copySync(appTsxSrc, appTsxTarget);
+		// await execa("vite", ["--config", "vite.config.ts", "--force"], {
+		// 	cwd: path.join(projectPath, "client"),
+		// });
 		//
+		await execa("vite", ["build"], {
+			cwd: path.join(projectPath, "client"),
+		});
+
+		await execa("tsc", ["-b"], {
+			cwd: path.join(projectPath, "client"),
+		});
+
 		spinner.success("TanStack Router setup completed");
 		return true;
 	} catch (err: unknown) {
