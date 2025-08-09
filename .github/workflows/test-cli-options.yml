@@ -20,49 +20,49 @@ jobs:
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Default + RPC + No TanStack Query + ESLint"
+            test_name: "Default + RPC + No TanStack Query + No Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Default + RPC + No TanStack Query + Biome"
+            test_name: "Default + RPC + No TanStack Query + No Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Default + No RPC + No TanStack Query + ESLint"
+            test_name: "Default + No RPC + No TanStack Query + No Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Default + No RPC + No TanStack Query + Biome"
+            test_name: "Default + No RPC + No TanStack Query + No Router + Biome"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Default + RPC + TanStack Query + ESLint"
+            test_name: "Default + RPC + TanStack Query + No Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Default + RPC + TanStack Query + Biome"
+            test_name: "Default + RPC + TanStack Query + No Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Default + No RPC + TanStack Query + ESLint"
+            test_name: "Default + No RPC + TanStack Query + No Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Default + No RPC + TanStack Query + Biome"
+            test_name: "Default + No RPC + TanStack Query + No Router + Biome"
 
           # Tailwind template combinations
           - template: "tailwind"
@@ -70,49 +70,49 @@ jobs:
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Tailwind + RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + No TanStack Query + No Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Tailwind + RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + RPC + No TanStack Query + No Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + No TanStack Query + No Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Tailwind + No RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + No TanStack Query + No Router + Biome"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Tailwind + RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + TanStack Query + No Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Tailwind + RPC + TanStack Query + Biome"
+            test_name: "Tailwind + RPC + TanStack Query + No Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + TanStack Query + No Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Tailwind + No RPC + TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + TanStack Query + No Router + Biome"
 
           # Shadcn template combinations
           - template: "shadcn"
@@ -120,49 +120,49 @@ jobs:
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Shadcn + RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + No TanStack Query + No Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Shadcn + RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + RPC + No TanStack Query + No Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + No TanStack Query + No Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "none"
             linter: "biome"
-            test_name: "Shadcn + No RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + No Router + Biome"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Shadcn + RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + TanStack Query + No Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Shadcn + RPC + TanStack Query + Biome"
+            test_name: "Shadcn + RPC + TanStack Query + No Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + TanStack Query + No Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "none"
             linter: "biome"
-            test_name: "Shadcn + No RPC + TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + TanStack Query + No Router + Biome"
 
           # React Router
           # Default template combinations
@@ -171,49 +171,49 @@ jobs:
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Default + RPC + No TanStack Query + ESLint"
+            test_name: "Default + RPC + No TanStack Query + React Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Default + RPC + No TanStack Query + Biome"
+            test_name: "Default + RPC + No TanStack Query + React Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Default + No RPC + No TanStack Query + ESLint"
+            test_name: "Default + No RPC + No TanStack Query + React Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Default + No RPC + No TanStack Query + Biome"
+            test_name: "Default + No RPC + No TanStack Query + React Router + Biome"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Default + RPC + TanStack Query + ESLint"
+            test_name: "Default + RPC + TanStack Query + React Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Default + RPC + TanStack Query + Biome"
+            test_name: "Default + RPC + TanStack Query + React Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Default + No RPC + TanStack Query + ESLint"
+            test_name: "Default + No RPC + TanStack Query + React Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Default + No RPC + TanStack Query + Biome"
+            test_name: "Default + No RPC + TanStack Query + React Router + Biome"
 
           # Tailwind template combinations
           - template: "tailwind"
@@ -221,49 +221,49 @@ jobs:
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Tailwind + RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + No TanStack Query + React Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Tailwind + RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + RPC + No TanStack Query + React Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + No TanStack Query + React Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Tailwind + No RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + No TanStack Query + React Router + Biome"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Tailwind + RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + TanStack Query + React Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Tailwind + RPC + TanStack Query + Biome"
+            test_name: "Tailwind + RPC + TanStack Query + React Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + TanStack Query + React Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Tailwind + No RPC + TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + TanStack Query + React Router + Biome"
 
           # Shadcn template combinations
           - template: "shadcn"
@@ -271,49 +271,49 @@ jobs:
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Shadcn + RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + No TanStack Query + React Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Shadcn + RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + RPC + No TanStack Query + React Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + No TanStack Query + React Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "reactrouter"
             linter: "biome"
-            test_name: "Shadcn + No RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + React Router + Biome"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Shadcn + RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + TanStack Query + React Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Shadcn + RPC + TanStack Query + Biome"
+            test_name: "Shadcn + RPC + TanStack Query + React Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + TanStack Query + React Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "reactrouter"
             linter: "biome"
-            test_name: "Shadcn + No RPC + TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + TanStack Query + React Router + Biome"
 
           # TanStack Router
           # Default template combinations
@@ -322,49 +322,49 @@ jobs:
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Default + RPC + No TanStack Query + ESLint"
+            test_name: "Default + RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Default + RPC + No TanStack Query + Biome"
+            test_name: "Default + RPC + No TanStack Query + TanStack Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Default + No RPC + No TanStack Query + ESLint"
+            test_name: "Default + No RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Default + No RPC + No TanStack Query + Biome"
+            test_name: "Default + No RPC + No TanStack Query + TanStack Router + Biome"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Default + RPC + TanStack Query + ESLint"
+            test_name: "Default + RPC + TanStack Query + TanStack Router + ESLint"
           - template: "default"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Default + RPC + TanStack Query + Biome"
+            test_name: "Default + RPC + TanStack Query + TanStack Router + Biome"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Default + No RPC + TanStack Query + ESLint"
+            test_name: "Default + No RPC + TanStack Query + TanStack Router + ESLint"
           - template: "default"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Default + No RPC + TanStack Query + Biome"
+            test_name: "Default + No RPC + TanStack Query + TanStack Router + Biome"
 
           # Tailwind template combinations
           - template: "tailwind"
@@ -372,49 +372,49 @@ jobs:
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Tailwind + RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Tailwind + RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + RPC + No TanStack Query + TanStack Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + No TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Tailwind + No RPC + No TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + No TanStack Query + TanStack Router + Biome"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Tailwind + RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + RPC + TanStack Query + TanStack Router + ESLint"
           - template: "tailwind"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Tailwind + RPC + TanStack Query + Biome"
+            test_name: "Tailwind + RPC + TanStack Query + TanStack Router + Biome"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Tailwind + No RPC + TanStack Query + ESLint"
+            test_name: "Tailwind + No RPC + TanStack Query + TanStack Router + ESLint"
           - template: "tailwind"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Tailwind + No RPC + TanStack Query + Biome"
+            test_name: "Tailwind + No RPC + TanStack Query + TanStack Router + Biome"
 
           # Shadcn template combinations
           - template: "shadcn"
@@ -422,49 +422,49 @@ jobs:
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Shadcn + RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Shadcn + RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + RPC + No TanStack Query + TanStack Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + No TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + No TanStack Query + TanStack Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: false
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Shadcn + No RPC + No TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + TanStack Router + Biome"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Shadcn + RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + RPC + TanStack Query + TanStack Router + ESLint"
           - template: "shadcn"
             rpc: true
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Shadcn + RPC + TanStack Query + Biome"
+            test_name: "Shadcn + RPC + TanStack Query + TanStack Router + Biome"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "eslint"
-            test_name: "Shadcn + No RPC + TanStack Query + ESLint"
+            test_name: "Shadcn + No RPC + TanStack Query + TanStack Router + ESLint"
           - template: "shadcn"
             rpc: false
             tanstackQuery: true
             router: "tanstackrouter"
             linter: "biome"
-            test_name: "Shadcn + No RPC + TanStack Query + Biome"
+            test_name: "Shadcn + No RPC + TanStack Query + TanStack Router + Biome"
 
     steps:
       - name: Checkout repository
@@ -487,34 +487,43 @@ jobs:
           echo "Creating project with options:"
           echo "Template: ${{ matrix.template }}"
           echo "RPC: ${{ matrix.rpc }}"
+          echo "TanStack Query: ${{ matrix.tanstackQuery }}"
+          echo "Router: ${{ matrix.router }}"
           echo "Linter: ${{ matrix.linter }}"
 
+          # Build the command with conditional flags
+          cmd="./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }} --yes --template ${{ matrix.template }}"
+          
           if [ "${{ matrix.rpc }}" = "true" ]; then
-            ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
-              --yes \
-              --template ${{ matrix.template }} \
-              --rpc \
-              --linter ${{ matrix.linter }}
-          else
-            ./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }} \
-              --yes \
-              --template ${{ matrix.template }} \
-              --linter ${{ matrix.linter }}
+            cmd="$cmd --rpc"
           fi
+          
+          if [ "${{ matrix.tanstackQuery }}" = "true" ]; then
+            cmd="$cmd --tsquery"
+          fi
+          
+          if [ "${{ matrix.router }}" != "none" ]; then
+            cmd="$cmd --router ${{ matrix.router }}"
+          fi
+          
+          cmd="$cmd --linter ${{ matrix.linter }}"
+          
+          echo "Running: $cmd"
+          eval $cmd
 
       - name: Install project dependencies
         run: |
-          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
           bun install
 
       - name: Build test project
         run: |
-          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
           bun run build
 
       - name: Verify build outputs
         run: |
-          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
 
           # Check that dist directories exist
           if [ ! -d "client/dist" ]; then
@@ -542,7 +551,7 @@ jobs:
 
       - name: Run linter on generated project
         run: |
-          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
 
           if [ "${{ matrix.linter }}" = "eslint" ]; then
             # Check if ESLint config exists and run it
@@ -561,4 +570,4 @@ jobs:
       - name: Cleanup test project
         if: always()
         run: |
-          rm -rf test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.linter }}
+          rm -rf test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
