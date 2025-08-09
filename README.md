@@ -48,6 +48,38 @@ You can also use command-line options to skip the interactive prompts:
 | `--router <router>`     | Specify a client router (`none`, `reactrouter`, `tanstackrouter`). | `none`    |
 | `--linter <linter>`     | Specify the linter to use (`eslint` or `biome`).             | `eslint`  |
 
+
+## Development
+
+Make sure [bun](https://bun.sh) is installed and up to date
+
+```bash
+bun --version
+bun upgrade
+```
+
+Clone the repo, install dependencies, and build
+
+```bash
+git clone https://github.com/stevedylandev/create-bhvr
+cd create-bhvr
+bun install
+bun run build
+```
+
+After making changes you can test the CLI locally by running `bun` against the build folder
+
+```bash
+bun dist
+```
+
+Alternatively you can use `bun link` and use it as a local executable
+
+```bash
+bun link
+create-bhvr
+```
+
 ## Contributing
 
 We welcome contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting a pull request, your help is appreciated.
