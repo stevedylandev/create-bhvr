@@ -11,7 +11,6 @@ program
 	.description("Create a bhvr monorepo starter project")
 	.argument("[project-directory]", "directory to create the project in")
 	.option("-y, --yes", "skip confirmation prompts")
-	.option("--ts, --typescript", "use TypeScript (default)")
 	.option(
 		"--repo <repo>",
 		"specify a custom GitHub repository as source",
