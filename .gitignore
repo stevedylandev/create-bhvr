@@ -41,3 +41,4 @@ pnpm-debug.log*
 
 # Bun
 bun.lockb
+.claude
