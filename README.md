@@ -18,6 +18,9 @@ bun create bhvr@latest my-bhvr-app
 
 This will create a new directory called `my-bhvr-app` inside the current folder.
 
+> [!NOTE]
+> Check out [bhvr.dev](https://bhvr.dev) for the full documentation!
+
 ## Features
 
 - **Interactive Setup**: A simple and fast interactive CLI to guide you through project setup.
@@ -26,6 +29,8 @@ This will create a new directory called `my-bhvr-app` inside the current folder.
     - `tailwind`: Includes Tailwind CSS for styling.
     - `shadcn`: Pre-configured with Tailwind CSS and shadcn/ui.
 - **Optional RPC**: Automatically configure Hono RPC for end-to-end type-safe API communication.
+- **TanStack Query**: Add TanStack Query for powerful data fetching and state management.
+- **Router Options**: Choose from multiple routing solutions (React Router, TanStack Router).
 - **Linter Choice**: Choose between ESLint (default) or Biome for code linting and formatting.
 - **Automated Setup**: Handles `git` initialization and dependency installation for you.
 
@@ -33,14 +38,15 @@ This will create a new directory called `my-bhvr-app` inside the current folder.
 
 You can also use command-line options to skip the interactive prompts:
 
-| Option                  | Description                                            | Default   |
-| ----------------------- | ------------------------------------------------------ | --------- |
-| `[project-directory]`   | The name of the directory to create the project in.    | -         |
-| `-y, --yes`             | Skip all confirmation prompts and use default values.  | `false`   |
-| `--template <template>` | Specify a template (`default`, `tailwind`, `shadcn`).  | `default` |
-| `--rpc`                 | Use Hono RPC for type-safe API communication.          | `false`   |
-| `--linter <linter>`     | Specify the linter to use (`eslint` or `biome`).       | `eslint`  |
-| `--branch <branch>`     | Specify a branch to use from the repository.           | `main`    |
+| Option                  | Description                                                  | Default   |
+| ----------------------- | ------------------------------------------------------------ | --------- |
+| `[project-directory]`   | The name of the directory to create the project in.          | -         |
+| `-y, --yes`             | Skip all confirmation prompts and use default values.        | `false`   |
+| `--template <template>` | Specify a template (`default`, `tailwind`, `shadcn`).        | `default` |
+| `--rpc`                 | Use Hono RPC for type-safe API communication.                | `false`   |
+| `--tsquery`             | Use TanStack Query for data fetching and state management.   | `false`   |
+| `--router <router>`     | Specify a client router (`none`, `reactrouter`, `tanstackrouter`). | `none`    |
+| `--linter <linter>`     | Specify the linter to use (`eslint` or `biome`).             | `eslint`  |
 
 ## Contributing
 
@@ -52,4 +58,4 @@ Please read our [**CONTRIBUTING.md**](CONTRIBUTING.md) for detailed guidelines o
 
 - [License (MIT)](LICENSE)
 - [Contributing](CONTRIBUTING.md)
-- [Website](https://bhvr.dev)
+- [Docs](https://bhvr.dev)
