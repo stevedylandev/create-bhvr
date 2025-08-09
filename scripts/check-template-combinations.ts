@@ -6,7 +6,94 @@ import fs from "fs-extra";
 import path from "node:path";
 
 // Define the possible boolean options from ProjectOptions type
-const BOOLEAN_OPTIONS = ["tailwind", "shadcn", "rpc", "tanstackQuery"] as const;
+const BOOLEAN_OPTIONS = [
+	"tailwind",
+	"shadcn",
+	"rpc",
+	"tanstackQuery",
+	"reactRouter",
+	"tanstackRouter",
+] as const;
+
+// Package dependency rules
+const PACKAGE_DEPENDENCIES: Record<string, string[]> = {
+	shadcn: ["tailwind"], // shadcn requires tailwind
+	// Add more dependencies here as needed
+	// example: somePackage: ["requiredPackage1", "requiredPackage2"]
+};
+
+// Mutually exclusive groups (only one option from each group can be selected)
+const MUTUALLY_EXCLUSIVE_GROUPS: string[][] = [
+	// Add mutually exclusive groups here as needed
+	// example: ["option1", "option2", "option3"]
+	["reactRouter", "tanstackRouter"],
+];
+
+// Check if a combination is valid based on dependencies and mutual exclusivity
+function isValidCombination(combination: Record<string, boolean>): boolean {
+	// Skip combinations with no packages selected
+	const hasAnyPackage = Object.values(combination).some((value) => value);
+	if (!hasAnyPackage) {
+		return false;
+	}
+
+	// Skip combinations that only contain shadcn and/or tailwind (they're cloned from repo)
+	const enabledPackages = Object.keys(combination).filter(
+		(key) => combination[key],
+	);
+	const onlyShadcnTailwind = enabledPackages.every(
+		(pkg) => pkg === "shadcn" || pkg === "tailwind",
+	);
+	if (onlyShadcnTailwind) {
+		return false;
+	}
+
+	// Check package dependencies
+	for (const [packageName, dependencies] of Object.entries(
+		PACKAGE_DEPENDENCIES,
+	)) {
+		if (combination[packageName]) {
+			// If this package is enabled, all its dependencies must also be enabled
+			for (const dependency of dependencies) {
+				if (!combination[dependency]) {
+					return false;
+				}
+			}
+		}
+	}
+
+	// Check mutual exclusivity
+	for (const group of MUTUALLY_EXCLUSIVE_GROUPS) {
+		const selectedInGroup = group.filter((option) => combination[option]);
+		if (selectedInGroup.length > 1) {
+			return false; // More than one option selected in mutually exclusive group
+		}
+	}
+
+	return true;
+}
+
+// Generate all possible combinations of boolean options with filtering
+function generateAllCombinations(
+	options: readonly string[],
+): Array<Record<string, boolean>> {
+	const combinations: Array<Record<string, boolean>> = [];
+	const totalCombinations = Math.pow(2, options.length);
+
+	for (let i = 0; i < totalCombinations; i++) {
+		const combination: Record<string, boolean> = {};
+		for (let j = 0; j < options.length; j++) {
+			combination[options[j]] = Boolean(i & (1 << j));
+		}
+
+		// Only include valid combinations
+		if (isValidCombination(combination)) {
+			combinations.push(combination);
+		}
+	}
+
+	return combinations;
+}
 
 // Simulate nameGenerator function locally
 const nameGenerator = (
@@ -30,24 +117,6 @@ const nameGenerator = (
 	}
 	return basename;
 };
-
-// Generate all possible combinations of boolean options
-function generateAllCombinations(
-	options: readonly string[],
-): Array<Record<string, boolean>> {
-	const combinations: Array<Record<string, boolean>> = [];
-	const totalCombinations = Math.pow(2, options.length);
-
-	for (let i = 0; i < totalCombinations; i++) {
-		const combination: Record<string, boolean> = {};
-		for (let j = 0; j < options.length; j++) {
-			combination[options[j]] = Boolean(i & (1 << j));
-		}
-		combinations.push(combination);
-	}
-
-	return combinations;
-}
 
 // Parse installer files to find nameGenerator calls and hardcoded template patterns
 // Recursively find all .ts files in installers directory
@@ -270,143 +339,23 @@ const hardcodedGenerator = (
 
 	let result = filename + "-with";
 
-	// Hardcoded follows specific order: tailwind, shadcn, rpc
+	// Hardcoded follows specific order: tailwind, shadcn, rpc, tanstackQuery, then routers
 	if (possibleOptions.tailwind) result += "-tailwind";
 	if (possibleOptions.shadcn) result += "-shadcn";
 	if (possibleOptions.rpc) result += "-rpc";
+	if (possibleOptions.tanstackQuery) result += "-tanstackquery";
+	if (possibleOptions.reactRouter) result += "-reactrouter";
 
 	return extension ? `${result}.${extension}` : result;
 };
 
 // Check if template files exist for all combinations
 async function checkTemplateFiles() {
-	console.log("🔍 Analyzing template patterns in installers...\n");
-
 	const templateCalls = await parseInstallerFiles();
 
 	if (templateCalls.length === 0) {
-		console.log("❌ No template patterns found in installer files!");
 		return;
 	}
-
-	const extrasDir = path.resolve("src/templates/extras");
-
-	for (const call of templateCalls) {
-		console.log(`📁 Analyzing: ${call.file} (${call.type})`);
-		console.log(`   Basename: ${call.basename}`);
-		console.log(`   Used Options: [${call.usedOptions.join(", ")}]`);
-		console.log(`   Template Path: ${call.templatePath}`);
-		console.log("");
-
-		// Generate all possible combinations for the used options
-		const allCombinations = generateAllCombinations(call.usedOptions);
-		const templateDir = path.join(
-			extrasDir,
-			call.templatePath.replace(/["']/g, ""),
-			call.basename,
-		);
-
-		console.log(
-			`   📋 All possible template files for ${call.basename} (${call.type}):`,
-		);
-
-		let foundCount = 0;
-		let missingCount = 0;
-
-		for (const combination of allCombinations) {
-			const templateName =
-				call.type === "nameGenerator"
-					? nameGenerator(call.basename, combination)
-					: hardcodedGenerator(call.basename, combination);
-			const fullTemplatePath = path.join(templateDir, templateName);
-
-			const exists = await fs.pathExists(fullTemplatePath);
-			const status = exists ? "✅" : "❌";
-
-			if (exists) {
-				foundCount++;
-			} else {
-				missingCount++;
-			}
-
-			// Show combination details
-			const enabledOptions = Object.keys(combination)
-				.filter((key) => combination[key])
-				.join(", ");
-
-			console.log(
-				`     ${status} ${templateName} ${enabledOptions ? `(${enabledOptions})` : "(no options)"}`,
-			);
-
-			if (!exists) {
-				console.log(`        Missing: ${fullTemplatePath}`);
-			}
-		}
-
-		console.log("");
-		console.log(`   📊 Summary: ${foundCount} found, ${missingCount} missing`);
-		console.log("   " + "=".repeat(50));
-		console.log("");
-	}
-
-	// Overall statistics
-	console.log("🎯 Overall Analysis Complete!");
-	console.log(
-		`   Found ${templateCalls.length} template patterns in installers`,
-	);
-	console.log(
-		`   - ${templateCalls.filter((c) => c.type === "nameGenerator").length} nameGenerator calls`,
-	);
-	console.log(
-		`   - ${templateCalls.filter((c) => c.type === "hardcoded").length} hardcoded template patterns`,
-	);
-
-	// Consistency analysis
-	console.log("");
-	console.log("!  CONSISTENCY ISSUES DETECTED:");
-	console.log(
-		"   The RPC installer uses hardcoded template names with order: tailwind-shadcn-rpc",
-	);
-	console.log(
-		"   The TanStack Query installer uses nameGenerator with alphabetical order: rpc-shadcn-tailwind-tanstackquery",
-	);
-	console.log("   But the actual template files follow the hardcoded pattern!");
-	console.log("");
-	console.log("💡 RECOMMENDATIONS:");
-	console.log(
-		"   1. Standardize on nameGenerator for consistency across all installers",
-	);
-	console.log(
-		"   2. OR rename template files to match nameGenerator's alphabetical sorting",
-	);
-	console.log(
-		"   3. OR update nameGenerator to use the same order as hardcoded pattern",
-	);
-	console.log("");
-	console.log("🔍 MISSING TEMPLATE FILES:");
-	const totalMissing = templateCalls.reduce((acc, call) => {
-		const allCombinations = generateAllCombinations(call.usedOptions);
-		return (
-			acc +
-			allCombinations.filter((combo) => {
-				const templateName =
-					call.type === "nameGenerator"
-						? nameGenerator(call.basename, combo)
-						: hardcodedGenerator(call.basename, combo);
-				const templateDir = path.join(
-					path.resolve("src/templates/extras"),
-					call.templatePath.replace(/["']/g, ""),
-					call.basename,
-				);
-				const fullTemplatePath = path.join(templateDir, templateName);
-				return !require("fs-extra").pathExistsSync(fullTemplatePath);
-			}).length
-		);
-	}, 0);
-	console.log(`   Total missing template files: ${totalMissing}`);
-
-	console.log("");
-	console.log("🛠  COMMANDS TO CREATE MISSING FILES:");
 
 	for (const call of templateCalls) {
 		const allCombinations = generateAllCombinations(call.usedOptions);
@@ -416,8 +365,6 @@ async function checkTemplateFiles() {
 			call.basename,
 		);
 
-		const missingFiles: string[] = [];
-
 		for (const combination of allCombinations) {
 			const templateName =
 				call.type === "nameGenerator"
@@ -425,18 +372,10 @@ async function checkTemplateFiles() {
 					: hardcodedGenerator(call.basename, combination);
 			const fullTemplatePath = path.join(templateDir, templateName);
 
-			const exists = require("fs-extra").pathExistsSync(fullTemplatePath);
+			const exists = await fs.pathExists(fullTemplatePath);
 			if (!exists) {
-				missingFiles.push(`touch "${fullTemplatePath}"`);
+				console.log(`touch "${fullTemplatePath}"`);
 			}
-		}
-
-		if (missingFiles.length > 0) {
-			console.log(`   # Missing files for ${call.basename} (${call.type}):`);
-			for (const cmd of missingFiles) {
-				console.log(`   ${cmd}`);
-			}
-			console.log("");
 		}
 	}
 }

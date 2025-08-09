@@ -3,11 +3,13 @@ import { setupBiome } from "./setup-biome";
 import path from "node:path";
 import { tanstackQueryInstaller } from "@/installers/tanstack-query";
 import { rpcInstaller } from "@/installers/rpc";
+import { reactRouterInstaller } from "@/installers/react-router";
+import { tanstackRouterInstaller } from "@/installers/tanstack-router";
 
 export async function installPackages(
 	options: Required<ProjectOptions>,
 ): Promise<boolean> {
-	const { projectName, rpc, linter, tanstackQuery } = options;
+	const { projectName, rpc, router, linter, tanstackQuery } = options;
 
 	const projectPath = path.resolve(process.cwd(), projectName);
 
@@ -21,6 +23,19 @@ export async function installPackages(
 
 	if (tanstackQuery) {
 		await tanstackQueryInstaller(options);
+	}
+
+	if (router !== "none") {
+		switch (router) {
+			case "reactrouter": {
+				await reactRouterInstaller(options);
+				break;
+			}
+			case "tanstackrouter": {
+				await tanstackRouterInstaller(options);
+				break;
+			}
+		}
 	}
 
 	return false;
