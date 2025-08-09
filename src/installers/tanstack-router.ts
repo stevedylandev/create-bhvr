@@ -103,7 +103,7 @@ export const tanstackRouterInstaller = async (
 		// 	cwd: path.join(projectPath, "client"),
 		// });
 		//
-		await execa("vite", ["build"], {
+		await execa("bunx", ["vite", "build"], {
 			cwd: path.join(projectPath, "client"),
 		});
 
