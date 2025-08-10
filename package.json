@@ -9,11 +9,10 @@
 		"create-bhvr": "./dist/index.js"
 	},
 	"files": [
-		"dist",
-		"src/templates"
+		"dist"
 	],
 	"scripts": {
-		"build": "bun build src/index.ts --outdir dist --target node",
+		"build": "bun build src/index.ts --outdir dist --target node && cp -r src/templates dist/",
 		"start": "bun ./dist/index.js",
 		"test": "bun test",
 		"test:watch": "bun test --watch",
