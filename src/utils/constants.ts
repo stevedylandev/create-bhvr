@@ -12,9 +12,9 @@ const __dirname = path.dirname(__filename);
 
 // Check if we're running from source or built version
 // In development, __dirname will contain 'src', in production it won't
-const isProduction = !__dirname.includes(path.sep + 'src' + path.sep);
-const templatesPath = isProduction 
-  ? path.resolve(__dirname, "templates", "extras")  // dist/index.js -> dist/templates/extras
-  : path.resolve(__dirname, "..", "templates", "extras");  // src/utils -> src/templates/extras
+const isProduction = !__dirname.includes(path.sep + "src" + path.sep);
+const templatesPath = isProduction
+	? path.resolve(__dirname, "templates", "extras") // dist/index.js -> dist/templates/extras
+	: path.resolve(__dirname, "..", "templates", "extras"); // src/utils -> src/templates/extras
 
 export const EXTRAS_DIR = templatesPath;
