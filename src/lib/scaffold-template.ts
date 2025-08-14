@@ -1,11 +1,11 @@
 import path from "node:path";
-import degit from "degit";
 import fs from "fs-extra";
 import pc from "picocolors";
 import yoctoSpinner from "yocto-spinner";
 import type { ProjectOptions } from "@/types";
 import { DEFAULT_REPO } from "@/utils/constants";
 import { TEMPLATES } from "@/utils/templates";
+import { execSync } from "node:child_process";
 
 export async function scaffoldTemplate(
 	options: Required<ProjectOptions>,
@@ -27,17 +27,14 @@ export async function scaffoldTemplate(
 	const templateConfig =
 		TEMPLATES[template as keyof typeof TEMPLATES] || TEMPLATES.default;
 	const repoBranch = branch || (templateConfig?.branch ?? "main");
-	const repoUrl = `${repoPath}#${repoBranch}`;
 	const spinner = yoctoSpinner({ text: "Downloading template..." }).start();
 
 	try {
-		const emitter = degit(repoUrl, {
-			cache: false,
-			force: true,
-			verbose: false,
-		});
+		execSync(
+			`git clone --depth 1 --branch ${repoBranch} https://github.com/${repoPath} ${projectPath}`,
+			{ stdio: "pipe" },
+		);
 
-		await emitter.clone(projectPath);
 		spinner.success(`Template downloaded successfully (${template} template)`);
 
 		const pkgJsonPath = path.join(projectPath, "package.json");
