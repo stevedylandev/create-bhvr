@@ -35,7 +35,7 @@ export async function setupBiome(projectPath: string): Promise<void> {
 		// Create biome.json in the root of the project
 		spinner.text = "Creating biome.json...";
 		const biomeConfig = {
-			$schema: "https://biomejs.dev/schemas/1.7.3/schema.json",
+			$schema: "https://biomejs.dev/schemas/2.2.4/schema.json",
 			vcs: {
 				enabled: true,
 				clientKind: "git",

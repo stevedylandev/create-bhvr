@@ -35,7 +35,7 @@
 	"author": "Steve Simkins",
 	"license": "MIT",
 	"devDependencies": {
-		"@biomejs/biome": "2.1.1",
+		"@biomejs/biome": "2.2.4",
 		"@types/degit": "^2.8.6",
 		"@types/figlet": "^1.7.0",
 		"@types/fs-extra": "^11.0.4",
