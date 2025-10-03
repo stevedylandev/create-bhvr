@@ -1,4 +1,3 @@
-import { useState } from "react";
 import beaver from "./assets/beaver.svg";
 import { hcWithType } from "server/dist/client";
 import { useMutation } from "@tanstack/react-query";
@@ -10,24 +9,16 @@ type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 const client = hcWithType(SERVER_URL);
 
 function App() {
-	const [data, setData] = useState<
-		Awaited<ReturnType<ResponseType["json"]>> | undefined
-	>();
-
-	const { mutate: sendRequest } = useMutation({
+	const apiRequestMutation = useMutation({
 		mutationFn: async () => {
-			try {
-				const res = await client.hello.$get();
-				if (!res.ok) {
-					console.log("Error fetching data");
-					return;
-				}
-				const data = await res.json();
-				setData(data);
-			} catch (error) {
-				console.log(error);
+			const res = await client.hello.$get();
+			if (!res.ok) {
+				throw new Error("Error fetching data");
 			}
+			const data = await res.json();
+			return data;
 		},
+		onError: (err: any) => console.log(err),
 	});
 
 	return (
@@ -49,7 +40,7 @@ function App() {
 			<div className="flex items-center gap-4">
 				<button
 					type="button"
-					onClick={() => sendRequest()}
+					onClick={() => apiRequestMutation.mutate()}
 					className="bg-black text-white px-2.5 py-1.5 rounded-md"
 				>
 					Call API
@@ -63,11 +54,11 @@ function App() {
 					Docs
 				</a>
 			</div>
-			{data && (
+			{apiRequestMutation.isSuccess && (
 				<pre className="bg-gray-100 p-4 rounded-md">
 					<code>
-						Message: {data.message} <br />
-						Success: {data.success.toString()}
+						Message: {apiRequestMutation.data.message} <br />
+						Success: {apiRequestMutation.data.success.toString()}
 					</code>
 				</pre>
 			)}
