@@ -1,4 +1,3 @@
-import { useState } from "react";
 import beaver from "./assets/beaver.svg";
 import { useMutation } from "@tanstack/react-query";
 import type { ApiResponse } from "shared";
@@ -7,13 +6,11 @@ import "./App.css";
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
 function App() {
-	const [data, setData] = useState<ApiResponse | undefined>();
-
-	const { mutate: sendRequest } = useMutation({
+	const apiRequestMutation = useMutation({
 		mutationFn: async () => {
 			const req = await fetch(`${SERVER_URL}/hello`);
 			const res: ApiResponse = await req.json();
-			setData(res);
+			return res;
 		},
 		onError: (err) => console.log(err),
 	});
@@ -34,7 +31,7 @@ function App() {
 			<p>A typesafe fullstack monorepo</p>
 			<div className="card">
 				<div className="button-container">
-					<button type="button" onClick={() => sendRequest()}>
+					<button type="button" onClick={() => apiRequestMutation.mutate()}>
 						Call API
 					</button>
 					<a
@@ -46,11 +43,11 @@ function App() {
 						Docs
 					</a>
 				</div>
-				{data && (
+				{apiRequestMutation.isSuccess && (
 					<pre className="response">
 						<code>
-							Message: {data.message} <br />
-							Success: {data.success.toString()}
+							Message: {apiRequestMutation.data.message} <br />
+							Success: {apiRequestMutation.data.success.toString()}
 						</code>
 					</pre>
 				)}

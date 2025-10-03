@@ -1,4 +1,3 @@
-import { useState } from "react";
 import beaver from "./assets/beaver.svg";
 import { Button } from "./components/ui/button";
 import { hcWithType } from "server/dist/client";
@@ -11,24 +10,16 @@ const client = hcWithType(SERVER_URL);
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
 function App() {
-	const [data, setData] = useState<
-		Awaited<ReturnType<ResponseType["json"]>> | undefined
-	>();
-
-	const { mutate: sendRequest } = useMutation({
+	const apiRequestMutation = useMutation({
 		mutationFn: async () => {
-			try {
-				const res = await client.hello.$get();
-				if (!res.ok) {
-					console.log("Error fetching data");
-					return;
-				}
-				const data = await res.json();
-				setData(data);
-			} catch (error) {
-				console.log(error);
+			const res = await client.hello.$get();
+			if (!res.ok) {
+				throw new Error("Error fetching data");
 			}
+			const data = await res.json();
+			return data;
 		},
+		onError: (err: any) => console.log(err),
 	});
 
 	return (
@@ -48,18 +39,18 @@ function App() {
 			<h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
 			<p>A typesafe fullstack monorepo</p>
 			<div className="flex items-center gap-4">
-				<Button onClick={() => sendRequest()}>Call API</Button>
+				<Button onClick={() => apiRequestMutation.mutate()}>Call API</Button>
 				<Button variant="secondary" asChild>
 					<a target="_blank" href="https://bhvr.dev" rel="noopener">
 						Docs
 					</a>
 				</Button>
 			</div>
-			{data && (
+			{apiRequestMutation.isSuccess && (
 				<pre className="bg-gray-100 p-4 rounded-md">
 					<code>
-						Message: {data.message} <br />
-						Success: {data.success.toString()}
+						Message: {apiRequestMutation.data.message} <br />
+						Success: {apiRequestMutation.data.success.toString()}
 					</code>
 				</pre>
 			)}

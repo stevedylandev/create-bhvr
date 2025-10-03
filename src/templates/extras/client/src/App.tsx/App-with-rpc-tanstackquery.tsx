@@ -1,4 +1,3 @@
-import { useState } from "react";
 import beaver from "./assets/beaver.svg";
 import { hcWithType } from "server/dist/client";
 import { useMutation } from "@tanstack/react-query";
@@ -11,24 +10,16 @@ const client = hcWithType(SERVER_URL);
 type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
 
 function App() {
-	const [data, setData] = useState<
-		Awaited<ReturnType<ResponseType["json"]>> | undefined
-	>();
-
-	const { mutate: sendRequest } = useMutation({
+	const apiRequestMutation = useMutation({
 		mutationFn: async () => {
-			try {
-				const res = await client.hello.$get();
-				if (!res.ok) {
-					console.log("Error fetching data");
-					return;
-				}
-				const data = await res.json();
-				setData(data);
-			} catch (error) {
-				console.log(error);
+			const res = await client.hello.$get();
+			if (!res.ok) {
+				throw new Error("Error fetching data");
 			}
+			const data = await res.json();
+			return data;
 		},
+		onError: (err: any) => console.log(err),
 	});
 
 	return (
@@ -47,7 +38,7 @@ function App() {
 			<p>A typesafe fullstack monorepo</p>
 			<div className="card">
 				<div className="button-container">
-					<button type="button" onClick={() => sendRequest()}>
+					<button type="button" onClick={() => apiRequestMutation.mutate()}>
 						Call API
 					</button>
 					<a
@@ -59,11 +50,11 @@ function App() {
 						Docs
 					</a>
 				</div>
-				{data && (
+				{apiRequestMutation.isSuccess && (
 					<pre className="response">
 						<code>
-							Message: {data.message} <br />
-							Success: {data.success.toString()}
+							Message: {apiRequestMutation.data.message} <br />
+							Success: {apiRequestMutation.data.success.toString()}
 						</code>
 					</pre>
 				)}

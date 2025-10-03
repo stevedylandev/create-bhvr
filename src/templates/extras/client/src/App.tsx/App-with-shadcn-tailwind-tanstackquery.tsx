@@ -1,4 +1,3 @@
-import { useState } from "react";
 import beaver from "./assets/beaver.svg";
 import type { ApiResponse } from "shared";
 import { Button } from "./components/ui/button";
@@ -7,18 +6,13 @@ import { useMutation } from "@tanstack/react-query";
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
 
 function App() {
-	const [data, setData] = useState<ApiResponse | undefined>();
-
-	const { mutate: sendRequest } = useMutation({
+	const apiRequestMutation = useMutation({
 		mutationFn: async () => {
-			try {
-				const req = await fetch(`${SERVER_URL}/hello`);
-				const res: ApiResponse = await req.json();
-				setData(res);
-			} catch (error) {
-				console.log(error);
-			}
+			const req = await fetch(`${SERVER_URL}/hello`);
+			const res: ApiResponse = await req.json();
+			return res;
 		},
+		onError: (err: any) => console.log(err),
 	});
 
 	return (
@@ -38,18 +32,18 @@ function App() {
 			<h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
 			<p>A typesafe fullstack monorepo</p>
 			<div className="flex items-center gap-4">
-				<Button onClick={() => sendRequest()}>Call API</Button>
+				<Button onClick={() => apiRequestMutation.mutate()}>Call API</Button>
 				<Button variant="secondary" asChild>
 					<a target="_blank" href="https://bhvr.dev" rel="noopener">
 						Docs
 					</a>
 				</Button>
 			</div>
-			{data && (
+			{apiRequestMutation.isSuccess && (
 				<pre className="bg-gray-100 p-4 rounded-md">
 					<code>
-						Message: {data.message} <br />
-						Success: {data.success.toString()}
+						Message: {apiRequestMutation.data.message} <br />
+						Success: {apiRequestMutation.data.success.toString()}
 					</code>
 				</pre>
 			)}
