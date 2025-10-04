@@ -689,14 +689,15 @@ jobs:
 
           # Check for expected files based on router type
           if [ "${{ matrix.router }}" = "reactroutermpa" ]; then
-            # React Router MPA has different build structure
+            # React Router MPA has different build structure (client-side only)
             if [ ! -d "client/dist/client" ]; then
               echo "❌ Client build incomplete - dist/client directory not found"
               exit 1
             fi
 
-            if [ ! -d "client/dist/server" ]; then
-              echo "❌ Client build incomplete - dist/server directory not found"
+            # Verify server build (separate from React Router MPA)
+            if [ ! -f "server/dist/index.js" ]; then
+              echo "❌ Server build incomplete - index.js not found"
               exit 1
             fi
 
