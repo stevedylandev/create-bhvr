@@ -42,3 +42,4 @@ pnpm-debug.log*
 # Bun
 bun.lockb
 .claude
+test-projects/*

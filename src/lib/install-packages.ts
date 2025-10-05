@@ -4,6 +4,7 @@ import path from "node:path";
 import { tanstackQueryInstaller } from "@/installers/tanstack-query";
 import { rpcInstaller } from "@/installers/rpc";
 import { reactRouterInstaller } from "@/installers/react-router";
+import { reactRouterMpaInstaller } from "@/installers/react-router-mpa";
 import { tanstackRouterInstaller } from "@/installers/tanstack-router";
 
 export async function installPackages(
@@ -29,6 +30,10 @@ export async function installPackages(
 		switch (router) {
 			case "reactrouter": {
 				await reactRouterInstaller(options);
+				break;
+			}
+			case "reactroutermpa": {
+				await reactRouterMpaInstaller(options);
 				break;
 			}
 			case "tanstackrouter": {

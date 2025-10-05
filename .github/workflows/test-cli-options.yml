@@ -315,6 +315,157 @@ jobs:
             linter: "biome"
             test_name: "Shadcn + No RPC + TanStack Query + React Router + Biome"
 
+          # React Router MPA
+          # Default template combinations
+          - template: "default"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Default + RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "default"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Default + RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "default"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Default + No RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "default"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Default + No RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Default + RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "default"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Default + RPC + TanStack Query + React Router MPA + Biome"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Default + No RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "default"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Default + No RPC + TanStack Query + React Router MPA + Biome"
+
+          # Tailwind template combinations
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Tailwind + RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Tailwind + RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Tailwind + No RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Tailwind + RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "tailwind"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Tailwind + RPC + TanStack Query + React Router MPA + Biome"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Tailwind + No RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "tailwind"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Tailwind + No RPC + TanStack Query + React Router MPA + Biome"
+
+          # Shadcn template combinations
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Shadcn + RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Shadcn + RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + No TanStack Query + React Router MPA + ESLint"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: false
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Shadcn + No RPC + No TanStack Query + React Router MPA + Biome"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Shadcn + RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "shadcn"
+            rpc: true
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Shadcn + RPC + TanStack Query + React Router MPA + Biome"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "eslint"
+            test_name: "Shadcn + No RPC + TanStack Query + React Router MPA + ESLint"
+          - template: "shadcn"
+            rpc: false
+            tanstackQuery: true
+            router: "reactroutermpa"
+            linter: "biome"
+            test_name: "Shadcn + No RPC + TanStack Query + React Router MPA + Biome"
+
           # TanStack Router
           # Default template combinations
           - template: "default"
@@ -493,21 +644,21 @@ jobs:
 
           # Build the command with conditional flags
           cmd="./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }} --yes --template ${{ matrix.template }}"
-          
+
           if [ "${{ matrix.rpc }}" = "true" ]; then
             cmd="$cmd --rpc"
           fi
-          
+
           if [ "${{ matrix.tanstackQuery }}" = "true" ]; then
             cmd="$cmd --tsquery"
           fi
-          
+
           if [ "${{ matrix.router }}" != "none" ]; then
             cmd="$cmd --router ${{ matrix.router }}"
           fi
-          
+
           cmd="$cmd --linter ${{ matrix.linter }}"
-          
+
           echo "Running: $cmd"
           eval $cmd
 
@@ -536,18 +687,35 @@ jobs:
             exit 1
           fi
 
-          # Check for expected files
-          if [ ! -f "client/dist/index.html" ]; then
-            echo "❌ Client build incomplete - index.html not found"
-            exit 1
-          fi
+          # Check for expected files based on router type
+          if [ "${{ matrix.router }}" = "reactroutermpa" ]; then
+            # React Router MPA has different build structure (client-side only)
+            if [ ! -d "client/dist/client" ]; then
+              echo "❌ Client build incomplete - dist/client directory not found"
+              exit 1
+            fi
 
-          if [ ! -f "server/dist/index.js" ]; then
-            echo "❌ Server build incomplete - index.js not found"
-            exit 1
-          fi
+            # Verify server build (separate from React Router MPA)
+            if [ ! -f "server/dist/index.js" ]; then
+              echo "❌ Server build incomplete - index.js not found"
+              exit 1
+            fi
 
-          echo "✅ Build verification passed for ${{ matrix.test_name }}"
+            echo "✅ React Router MPA build verification passed for ${{ matrix.test_name }}"
+          else
+            # Standard build structure
+            if [ ! -f "client/dist/index.html" ]; then
+              echo "❌ Client build incomplete - index.html not found"
+              exit 1
+            fi
+
+            if [ ! -f "server/dist/index.js" ]; then
+              echo "❌ Server build incomplete - index.js not found"
+              exit 1
+            fi
+
+            echo "✅ Build verification passed for ${{ matrix.test_name }}"
+          fi
 
       - name: Run linter on generated project
         run: |

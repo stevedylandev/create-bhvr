@@ -29,7 +29,7 @@ program
 	)
 	.option(
 		"--router <router>",
-		"specify a client router (none, reactrouter, tanstackrouter)",
+		"specify a client router (none, reactrouter, reactroutermpa, tanstackrouter)",
 	)
 	.option("--linter <linter>", "specify the linter to use (eslint or biome)")
 	.action(create);

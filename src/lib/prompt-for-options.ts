@@ -102,6 +102,7 @@ export async function promptForOptions(
 				options: [
 					{ label: "None (default)", value: "none" },
 					{ label: "React Router", value: "reactrouter" },
+					{ label: "React Router MPA", value: "reactroutermpa" },
 					{ label: "TanStack Router", value: "tanstackrouter" },
 				],
 				initial: "none",
@@ -114,7 +115,11 @@ export async function promptForOptions(
 			process.exit(1);
 		}
 
-		router = routerResponse as "none" | "reactrouter" | "tanstackrouter";
+		router = routerResponse as
+			| "none"
+			| "reactrouter"
+			| "reactroutermpa"
+			| "tanstackrouter";
 	}
 
 	let useTanstackQuery = options.tanstackQuery;
