@@ -115,6 +115,18 @@ export const reactRouterMpaInstaller = async (
 		);
 		fs.copySync(homeComponentSrc, homeComponentTarget);
 
+		// Remove unused files (App.tsx and main.tsx are not used in MPA setup)
+		const appTsxPath = path.join(projectPath, "client", "src", "App.tsx");
+		const mainTsxPath = path.join(projectPath, "client", "src", "main.tsx");
+
+		if (fs.existsSync(appTsxPath)) {
+			fs.removeSync(appTsxPath);
+		}
+
+		if (fs.existsSync(mainTsxPath)) {
+			fs.removeSync(mainTsxPath);
+		}
+
 		// Copy react-router.config.ts
 		const reactRouterConfigSrc = path.join(
 			EXTRAS_DIR,
