@@ -34,25 +34,7 @@ export async function setupBiome(projectPath: string): Promise<void> {
 
 		// Create biome.json in the root of the project
 		spinner.text = "Creating biome.json...";
-		const biomeConfig = {
-			$schema: "https://biomejs.dev/schemas/2.2.4/schema.json",
-			vcs: {
-				enabled: true,
-				clientKind: "git",
-				useIgnoreFile: true,
-			},
-			files: { ignoreUnknown: false, ignore: [] },
-			formatter: { enabled: true },
-			organizeImports: { enabled: true },
-			linter: {
-				enabled: true,
-				rules: {
-					recommended: true,
-				},
-			},
-		};
-		const biomeConfigPath = path.join(projectPath, "biome.json");
-		await fs.writeJson(biomeConfigPath, biomeConfig, { spaces: 2 });
+		await execa("bunx", ["@biome-js/biome", "init"], { cwd: projectPath });
 
 		// Update client package.json scripts to remove lint
 		spinner.text = "Updating scripts in client/package.json...";
