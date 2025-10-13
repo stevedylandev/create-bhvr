@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// @ts-ignore: Shebang line
+// @ts-expect-error: Shebang line
 
 import { create } from "@/commands/create";
 import { program } from "@/program";
