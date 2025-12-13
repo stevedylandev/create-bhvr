@@ -7,6 +7,16 @@ import yoctoSpinner from "yocto-spinner";
 export async function setupBiome(projectPath: string): Promise<void> {
 	const spinner = yoctoSpinner({ text: "Setting up Biome..." }).start();
 	try {
+		// Check if bunx is available
+		try {
+			await execa("bunx", ["--version"]);
+		} catch {
+			spinner.error("bunx is not available");
+			throw new Error(
+				"bunx must be installed. Please install Bun first: https://bun.sh",
+			);
+		}
+
 		const clientPath = path.join(projectPath, "client");
 		const clientPkgJsonPath = path.join(clientPath, "package.json");
 		const eslintConfigPath = path.join(clientPath, "eslint.config.js");
