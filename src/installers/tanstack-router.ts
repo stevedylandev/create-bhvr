@@ -17,6 +17,18 @@ export const tanstackRouterInstaller = async (
 	}).start();
 
 	try {
+		// Check if bunx is available
+		try {
+			await execa("bunx", ["--version"]);
+		} catch {
+			spinner.error("bunx is not available");
+			consola.error(
+				pc.red("Error:"),
+				"bunx must be installed. Please install Bun first: https://bun.sh",
+			);
+			return false;
+		}
+
 		const { projectName, rpc, shadcn, tailwind, tanstackQuery } = options;
 
 		const projectPath = path.resolve(process.cwd(), projectName);
