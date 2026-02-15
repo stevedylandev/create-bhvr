@@ -669,9 +669,7 @@ jobs:
           cmd="$cmd --linter ${{ matrix.linter }}"
 
           # Default to no-build unless explicitly disabled
-          if [ "${{ matrix.noBuild }}" = "false" ]; then
-            cmd="$cmd --build"
-          else
+          if [ "${{ matrix.noBuild }}" != "false" ]; then
             cmd="$cmd --no-build"
           fi
 
