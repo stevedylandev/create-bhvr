@@ -68,6 +68,12 @@ export async function noBuildInstaller(
 			await fs.writeJson(sharedPkgPath, sharedPkg, { spaces: 2 });
 		}
 
+		// Remove prebuilt shared dist if present
+		const sharedDistPath = path.join(projectPath, "shared", "dist");
+		if (await fs.pathExists(sharedDistPath)) {
+			await fs.remove(sharedDistPath);
+		}
+
 		// 3. Update server package.json - replace build with typecheck
 		const serverPkgPath = path.join(projectPath, "server", "package.json");
 		if (await fs.pathExists(serverPkgPath)) {
@@ -80,6 +86,12 @@ export async function noBuildInstaller(
 			serverPkg.scripts.typecheck = "tsc --noEmit";
 
 			await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
+		}
+
+		// Remove prebuilt server dist if present
+		const serverDistPath = path.join(projectPath, "server", "dist");
+		if (await fs.pathExists(serverDistPath)) {
+			await fs.remove(serverDistPath);
 		}
 
 		// 4. Update client package.json - remove tsc -b from build, add typecheck
