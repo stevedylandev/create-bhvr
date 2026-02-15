@@ -1,7 +1,7 @@
-import { useState } from "react";
-import beaver from "../assets/beaver.svg";
-import { hcWithType } from "server/dist/client";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { hcWithType } from "server/client";
+import beaver from "../assets/beaver.svg";
 import "../App.css";
 import ClientOnly from "./ClientOnly";
 

@@ -1,8 +1,8 @@
+import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { hcWithType } from "server/client";
 import beaver from "../assets/beaver.svg";
-import { hcWithType } from "server/dist/client";
-import { useMutation } from "@tanstack/react-query";
 import "../App.css";
 
 export const Route = createFileRoute("/")({

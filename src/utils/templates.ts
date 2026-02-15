@@ -14,7 +14,7 @@ export const TEMPLATES: Record<string, TemplateInfo> = {
 
 export const honoRpcTemplate = `import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { ApiResponse } from "shared/dist";
+import type { ApiResponse } from "shared";
 
 export const app = new Hono()
 
@@ -46,7 +46,7 @@ export const hcWithType = (...args: Parameters<typeof hc>): Client =>
 
 export const tailwindTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
-import { hcWithType } from 'server/dist/client'
+import { hcWithType } from 'server/client'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
@@ -111,7 +111,7 @@ export default App`;
 export const shadcnTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
 import { Button } from './components/ui/button'
-import { hcWithType } from 'server/dist/client'
+import { hcWithType } from 'server/client'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
 
@@ -179,7 +179,7 @@ export default App`;
 
 export const defaultTemplate = `import { useState } from 'react'
 import beaver from './assets/beaver.svg'
-import { hcWithType } from 'server/dist/client'
+import { hcWithType } from 'server/client'
 import './App.css'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000"
