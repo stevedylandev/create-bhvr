@@ -4,10 +4,10 @@ import { execa } from "execa";
 import fs from "fs-extra";
 import pc from "picocolors";
 import yoctoSpinner from "yocto-spinner";
-import { honoClientTemplate, honoRpcTemplate } from "@/utils/templates";
 import type { ProjectOptions } from "@/types";
 import { EXTRAS_DIR } from "@/utils";
 import { nameGenerator } from "@/utils/name-generator";
+import { honoClientTemplate, honoRpcTemplate } from "@/utils/templates";
 
 export async function rpcInstaller(
 	options: Required<ProjectOptions>,
@@ -34,6 +34,15 @@ export async function rpcInstaller(
 
 		// Update the dev script to include parallel TypeScript compilation
 		serverPkg.scripts.dev = "bun --watch run src/index.ts & tsc --watch";
+
+		// Add exports mapping for server/client subpath
+		serverPkg.exports = {
+			...serverPkg.exports,
+			"./client": {
+				types: "./dist/client.d.ts",
+				default: "./dist/client.js",
+			},
+		};
 
 		await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
 
