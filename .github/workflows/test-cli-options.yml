@@ -652,6 +652,8 @@ jobs:
           echo "Linter: ${{ matrix.linter }}"
 
           # Build the command with conditional flags
+          no_build_value="${{ matrix.noBuild || 'true' }}"
+
           cmd="./dist/index.js test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }} --yes --template ${{ matrix.template }}"
 
           if [ "${{ matrix.rpc }}" = "true" ]; then
@@ -669,7 +671,7 @@ jobs:
           cmd="$cmd --linter ${{ matrix.linter }}"
 
           # Default to no-build unless explicitly disabled
-          if [ "${{ matrix.noBuild }}" != "false" ]; then
+          if [ "$no_build_value" != "false" ]; then
             cmd="$cmd --no-build"
           fi
 
@@ -696,7 +698,9 @@ jobs:
             exit 1
           fi
 
-          if [ "${{ matrix.noBuild }}" = "false" ]; then
+          no_build_value="${{ matrix.noBuild || 'true' }}"
+
+          if [ "$no_build_value" = "false" ]; then
             # Check that server/shared dist directories exist
             if [ ! -d "server/dist" ]; then
               echo "❌ Server build failed - dist directory not found"
@@ -728,7 +732,7 @@ jobs:
               exit 1
             fi
 
-            if [ "${{ matrix.noBuild }}" = "false" ]; then
+            if [ "$no_build_value" = "false" ]; then
               # Verify server build (separate from React Router MPA)
               if [ ! -f "server/dist/index.js" ]; then
                 echo "❌ Server build incomplete - index.js not found"
@@ -744,7 +748,7 @@ jobs:
               exit 1
             fi
 
-            if [ "${{ matrix.noBuild }}" = "false" ]; then
+            if [ "$no_build_value" = "false" ]; then
               if [ ! -f "server/dist/index.js" ]; then
                 echo "❌ Server build incomplete - index.js not found"
                 exit 1
