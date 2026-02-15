@@ -517,6 +517,15 @@ jobs:
             linter: "biome"
             test_name: "Default + No RPC + TanStack Query + TanStack Router + Biome"
 
+          # No-build=false coverage
+          - template: "default"
+            rpc: true
+            tanstackQuery: false
+            router: "none"
+            linter: "eslint"
+            noBuild: false
+            test_name: "Default + RPC + No TanStack Query + No Router + ESLint + Build"
+
           # Tailwind template combinations
           - template: "tailwind"
             rpc: true
@@ -659,6 +668,13 @@ jobs:
 
           cmd="$cmd --linter ${{ matrix.linter }}"
 
+          # Default to no-build unless explicitly disabled
+          if [ "${{ matrix.noBuild }}" = "false" ]; then
+            cmd="$cmd --build"
+          else
+            cmd="$cmd --no-build"
+          fi
+
           echo "Running: $cmd"
           eval $cmd
 
@@ -676,15 +692,34 @@ jobs:
         run: |
           cd test-project-${{ matrix.template }}-${{ matrix.rpc }}-${{ matrix.tanstackQuery }}-${{ matrix.router }}-${{ matrix.linter }}
 
-          # Check that dist directories exist
+          # Check client dist directory exists
           if [ ! -d "client/dist" ]; then
             echo "❌ Client build failed - dist directory not found"
             exit 1
           fi
 
-          if [ ! -d "server/dist" ]; then
-            echo "❌ Server build failed - dist directory not found"
-            exit 1
+          if [ "${{ matrix.noBuild }}" = "false" ]; then
+            # Check that server/shared dist directories exist
+            if [ ! -d "server/dist" ]; then
+              echo "❌ Server build failed - dist directory not found"
+              exit 1
+            fi
+
+            if [ ! -d "shared/dist" ]; then
+              echo "❌ Shared build failed - dist directory not found"
+              exit 1
+            fi
+          else
+            # Ensure no-build outputs are not generated
+            if [ -d "server/dist" ]; then
+              echo "❌ Server dist should not exist in no-build mode"
+              exit 1
+            fi
+
+            if [ -d "shared/dist" ]; then
+              echo "❌ Shared dist should not exist in no-build mode"
+              exit 1
+            fi
           fi
 
           # Check for expected files based on router type
@@ -695,10 +730,12 @@ jobs:
               exit 1
             fi
 
-            # Verify server build (separate from React Router MPA)
-            if [ ! -f "server/dist/index.js" ]; then
-              echo "❌ Server build incomplete - index.js not found"
-              exit 1
+            if [ "${{ matrix.noBuild }}" = "false" ]; then
+              # Verify server build (separate from React Router MPA)
+              if [ ! -f "server/dist/index.js" ]; then
+                echo "❌ Server build incomplete - index.js not found"
+                exit 1
+              fi
             fi
 
             echo "✅ React Router MPA build verification passed for ${{ matrix.test_name }}"
@@ -709,9 +746,11 @@ jobs:
               exit 1
             fi
 
-            if [ ! -f "server/dist/index.js" ]; then
-              echo "❌ Server build incomplete - index.js not found"
-              exit 1
+            if [ "${{ matrix.noBuild }}" = "false" ]; then
+              if [ ! -f "server/dist/index.js" ]; then
+                echo "❌ Server build incomplete - index.js not found"
+                exit 1
+              fi
             fi
 
             echo "✅ Build verification passed for ${{ matrix.test_name }}"
