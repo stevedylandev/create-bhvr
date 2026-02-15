@@ -32,17 +32,25 @@ export async function rpcInstaller(
 		const serverPkgPath = path.join(projectPath, "server", "package.json");
 		const serverPkg = await fs.readJson(serverPkgPath);
 
-		// Update the dev script to include parallel TypeScript compilation
-		serverPkg.scripts.dev = "bun --watch run src/index.ts & tsc --watch";
+		// Update the dev script - include tsc --watch only if not in noBuild mode
+		serverPkg.scripts.dev = options.noBuild
+			? "bun --watch run src/index.ts"
+			: "bun --watch run src/index.ts & tsc --watch";
 
 		// Add exports mapping for server/client subpath
-		serverPkg.exports = {
-			...serverPkg.exports,
-			"./client": {
-				types: "./dist/client.d.ts",
-				default: "./dist/client.js",
-			},
-		};
+		// In noBuild mode, point directly to source; otherwise use compiled dist
+		serverPkg.exports = options.noBuild
+			? {
+					...serverPkg.exports,
+					"./client": "./src/client.ts",
+				}
+			: {
+					...serverPkg.exports,
+					"./client": {
+						types: "./dist/client.d.ts",
+						default: "./dist/client.js",
+					},
+				};
 
 		await fs.writeJson(serverPkgPath, serverPkg, { spaces: 2 });
 

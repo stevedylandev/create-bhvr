@@ -32,6 +32,10 @@ program
 		"specify a client router (none, reactrouter, reactroutermpa, tanstackrouter)",
 	)
 	.option("--linter <linter>", "specify the linter to use (eslint or biome)")
+	.option(
+		"--no-build",
+		"skip tsc compilation, import directly from source (simpler but not packageable)",
+	)
 	.action(create);
 
 program.parse();

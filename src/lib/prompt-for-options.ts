@@ -143,6 +143,27 @@ export async function promptForOptions(
 		useTanstackQuery = tanstackQueryResponse;
 	}
 
+	let noBuild = options.noBuild;
+
+	if (!options.yes && options.noBuild === undefined) {
+		const { data: noBuildResponse, error } = await tryCatch(
+			consola.prompt(
+				"Skip TypeScript compilation? (Use Bun/Vite to run TS directly - simpler but not packageable)",
+				{
+					type: "confirm",
+					initial: true,
+				},
+			),
+		);
+
+		if (error) {
+			consola.error("Project creation cancelled.");
+			process.exit(1);
+		}
+
+		noBuild = noBuildResponse;
+	}
+
 	return {
 		...options,
 		projectName,
@@ -153,5 +174,6 @@ export async function promptForOptions(
 		linter,
 		router,
 		tanstackQuery: useTanstackQuery,
+		noBuild: options.yes ? (options.noBuild ?? true) : noBuild,
 	};
 }

@@ -16,6 +16,7 @@ export type ProjectOptions = {
 	linter?: "eslint" | "biome";
 	router?: "none" | "reactrouter" | "reactroutermpa" | "tanstackrouter";
 	tanstackQuery?: boolean;
+	noBuild?: boolean;
 };
 
 export interface ProjectResult {
