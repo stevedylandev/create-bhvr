@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { hcWithType } from "server/client";
 import beaver from "@/assets/beaver.svg";
 import { Button } from "@/components/ui/button";
-import { hcWithType } from "server/dist/client";
 import ClientOnly from "./ClientOnly";
 
 const SERVER_URL = import.meta.env.DEV ? "http://localhost:3000" : "/api";
