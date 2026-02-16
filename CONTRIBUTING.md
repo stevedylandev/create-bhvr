@@ -14,6 +14,8 @@ If you have an idea for an enhancement, please make sure the enhancement has not
 
 ### Submitting a Pull Request
 
+**Important:** Before starting work on a pull request, you must first [open an issue](https://github.com/stevedylandev/bhvr/issues/new) describing your proposed change and wait for it to be reviewed and approved. PRs without a corresponding approved issue will be closed.
+
 1.  Fork the repository and create your branch from `main`.
 2.  Run `bun install` to install the dependencies.
 3.  Make your changes.
