@@ -12,7 +12,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "bun build src/index.ts --outdir dist --target node && cp -r src/templates dist/",
+		"build": "bun build src/index.ts --minify --outdir dist --target node && cp -r src/templates dist/",
 		"start": "bun ./dist/index.js",
 		"test": "bun test",
 		"test:watch": "bun test --watch",
